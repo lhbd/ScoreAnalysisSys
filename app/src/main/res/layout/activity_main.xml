@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/dog4"
+    >
+    <include layout="@layout/toolbar_layout"/>
+    <RelativeLayout
+        android:id="@+id/login_div"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dip"
+        android:layout_margin="15dip"
+        android:background="@drawable/background_login_div_bg"
+        >
+        <!-- 学校 -->
+        <TextView
+            android:id="@+id/user_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="广东技术师范学院"
+            android:textColor="@color/text_black_color"/>
+        <!-- 账号 -->
+        <TextView
+            android:id="@+id/login_user_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_message"
+            android:layout_marginTop="5dp"
+            android:text="@string/login_label_username"
+            style="@style/normalText"/>
+        <EditText
+            android:id="@+id/username_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_username_hint"
+            android:textColor="@color/text_black_color"
+            android:textColorHint="@android:color/darker_gray"
+            android:layout_below="@id/login_user_input"
+            android:background="@drawable/bg_edittext"
+            android:maxLines="1"
+            android:inputType="number"
+            android:digits="@string/login_digit_element"/>
+        <!-- 密码 text -->
+        <TextView
+            android:id="@+id/login_password_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/username_edit"
+            android:layout_marginTop="3dp"
+            android:text="@string/login_label_password"
+            style="@style/normalText"/>
+        <EditText
+            android:id="@+id/password_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_password_input"
+            android:background="@drawable/bg_edittext"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:digits="@string/login_digit_element"
+            android:textColor="@color/text_black_color"
+            />
+
+        <CheckBox
+            android:id="@+id/cb_pwd"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/password_edit"
+            android:text="@string/login_remember_password"
+            android:textColor="@color/text_black_color" />
+
+        <CheckBox
+            android:id="@+id/cb_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cb_pwd"
+            android:text="@string/login_auto"
+            android:textColor="@color/text_black_color" />
+        <!-- 登录button -->
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/password_edit"
+            android:layout_alignEnd="@id/password_edit"
+            android:layout_marginTop="10dp"
+            android:text="@string/login_label_signin"
+            android:background="@drawable/bg_loginbtn"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView  android:id="@+id/find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            />
+
+        <ImageView android:id="@+id/dog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+</LinearLayout>

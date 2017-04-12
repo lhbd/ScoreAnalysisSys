@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <com.gdin.analyse.tools.CustomAutoCompleteTextView
+        android:id="@+id/register_school"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/register_school_name"
+        android:dropDownSelector="@android:color/darker_gray"
+        android:background="@drawable/bg_edittext"
+        android:layout_margin="10dp"/>
+
+    <Spinner
+        android:id="@+id/register_grade"
+        android:layout_below="@id/register_school"
+        android:layout_alignParentStart="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <Spinner
+        android:id="@+id/register_class"
+        android:layout_below="@id/register_school"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:spinnerMode="dropdown"
+        />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_grade"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+        <RadioButton android:id="@+id/degree_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_degree_teacher" />
+        <RadioButton android:id="@+id/degree_student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_degree_student" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/register_cancel_btn"
+        android:layout_below="@id/radioGroup"
+        android:layout_alignParentStart="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_loginbtn"
+        android:text="@string/cancel"
+        />
+    <Button
+        android:id="@+id/register_confirm_btn"
+        android:layout_below="@id/radioGroup"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_loginbtn"
+        android:text="@string/confirm"
+        />
+</RelativeLayout>
