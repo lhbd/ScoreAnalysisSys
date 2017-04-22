@@ -5,14 +5,18 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.LinkMovementMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +36,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseAppCompatActivity implements LoginView {
+
+    private final int REGISTER_ACTIVITY = 0;
+
     @BindView(R.id.username_edit)
     EditText userEdit;
     @BindView(R.id.password_edit)
@@ -40,25 +47,23 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     CheckBox remPwd;
     @BindView(R.id.cb_auto)
     CheckBox autoLogin;
-
-
-    final int REGISTER_ACTIVITY = 0;
     @BindView(R.id.user_message)
     TextView userMessage;
+    @BindView(R.id.user_picture)
+    ImageButton userPicture;
+    @BindView(R.id.pwd_eye)
+    ImageButton pwdEye;
+    @BindView(R.id.login_button)
+    Button loginButton;
 
     private LoginPresent loginPresent;
+    private boolean isHidden = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getToolbarTitle().setText(R.string.login_label_signin);
         initWidget();
 
-    }
-
-    @Override
-    protected boolean isShowBacking() {
-        return false;
     }
 
     @Override
@@ -82,10 +87,11 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
             buffer.append(data.getStringExtra("className"));
 
             userMessage.setText(buffer);
-            loginPresent.saveRegister(buffer,data);
+            loginPresent.saveRegister(buffer, data);
         }
     }
-    @OnClick({R.id.user_message, R.id.login_button})
+
+    @OnClick({R.id.user_message, R.id.login_button, R.id.user_picture, R.id.pwd_eye})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_message:
@@ -94,18 +100,44 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
             case R.id.login_button:
                 onclickLoginBtn();
                 break;
+            case R.id.user_picture:
+                break;
+            case R.id.pwd_eye:
+                clickEye();
+                break;
         }
+    }
+
+    private void clickEye() {
+        if (isHidden) {
+            //设置EditText文本为可见的
+            pwdEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            pwdEye.setBackgroundResource(R.drawable.show_pwd_press);
+            isHidden = false;
+        } else {
+            //设置EditText文本为隐藏的
+            pwdEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            pwdEye.setBackgroundResource(R.drawable.show_pwd_default);
+            isHidden = true;
+        }
+        pwdEdit.postInvalidate();
+//        //切换后将EditText光标置于末尾
+//        CharSequence charSequence = mPasswordEditText.getText();
+//        if (charSequence instanceof Spannable) {
+//            Spannable spanText = (Spannable) charSequence;
+//            Selection.setSelection(spanText, charSequence.length());
+//        }
     }
 
     private void initWidget() {
 
         loginPresent = new LoginPresent(this);
-        userMessage.setText(loginPresent.getString("userMessage",""));
+        userMessage.setText(loginPresent.getString("userMessage", ""));
         initRegisterString();
         initCheckBoxForRemPwd();
         initCheckBoxForAutoLogin();
         initLoginMessage();
-        if (userMessage.getText().equals("")){
+        if (userMessage.getText().equals("")) {
             openRegisterDialog();
         }
 
@@ -147,7 +179,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                 if (remPwd.isChecked()) {
                     loginPresent.updateCheckState("remember", true);
                 } else {
-                    loginPresent.saveUser("","");
+                    loginPresent.saveUser("", "");
                     loginPresent.updateCheckState("remember", false);
                 }
 
@@ -161,7 +193,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
         autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (autoLogin.isChecked()) {
-                    if (!loginPresent.isChecked("remember")){
+                    if (!loginPresent.isChecked("remember")) {
                         remPwd.setChecked(true);
                         loginPresent.updateCheckState("remember", true);
                     }
@@ -187,7 +219,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
         }
     }
 
-    public void resetCheckState(){
+    public void resetCheckState() {
         loginPresent.updateCheckState("remember", false);
         loginPresent.updateCheckState("autoLogin", false);
     }
@@ -197,28 +229,28 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
 
     }
 
-    private void onclickLoginBtn(){
-        LoginDataEntity entity = new LoginDataEntity(loginPresent.getInt("loginSchoolId",0),
-                loginPresent.getInt("loginGradeId",0),loginPresent.getInt("loginClassId",0),loginPresent.getString("loginType",""),
-                userEdit.getText().toString(),pwdEdit.getText().toString());
+    private void onclickLoginBtn() {
+
+        LoginDataEntity entity = new LoginDataEntity(loginPresent.getInt("loginSchoolId", 0),
+                loginPresent.getInt("loginGradeId", 0), loginPresent.getInt("loginClassId", 0), loginPresent.getString("loginType", ""),
+                userEdit.getText().toString(), pwdEdit.getText().toString());
 
         HttpMethods.getInstance().checkLogin(new cSubscriber<HttpResult<List<LoginDataEntity>>>() {
             @Override
             public void onComplete() {
-                if (remPwd.isChecked()) {
-                    loginPresent.saveUser(userEdit.getText().toString(),pwdEdit.getText().toString());
-                }
-                Intent intent = new Intent(LoginActivity.this,TMainActivity.class);
-                startActivity(intent);
             }
 
             @Override
             public void onNext(HttpResult<List<LoginDataEntity>> listHttpResult, int i) {
+//                int code = listHttpResult.getCode();
+//                if (code!=200){
+//                    throw new ApiException(code);
+//                }
                 if (remPwd.isChecked()) {
-                    loginPresent.saveUser(userEdit.getText().toString(),pwdEdit.getText().toString());
-                }
-                Intent intent = new Intent(LoginActivity.this,TMainActivity.class);
-                startActivity(intent);
+                    loginPresent.saveUser(userEdit.getText().toString(), pwdEdit.getText().toString());
+               }
+                startActivity(LoginActivity.this, TMainActivity.class);
+                finish();
             }
         }, entity);
     }
@@ -226,8 +258,10 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (StringUtils.isEmpty(loginPresent.getString("user", "")) || StringUtils.isEmpty(loginPresent.getString("pwd", ""))){
+        if (StringUtils.isEmpty(loginPresent.getString("user", "")) || StringUtils.isEmpty(loginPresent.getString("pwd", ""))) {
             resetCheckState();
         }
     }
+
+
 }

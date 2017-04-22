@@ -1,30 +1,37 @@
 package com.gdin.analyse.activity;
 
+import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.gdin.analyse.R;
 
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
-    private static final String TAG = BaseAppCompatActivity.class.getSimpleName();
+    public static final int EXPLODE = 0;       //分解动画
+    public static final int FADE = 1;          //淡入淡出
+    public static final int SLIDE = 2;         //滑进滑出
     private TextView mToolbarTitle;
     private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(getLayoutId());
         bindView();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-         /*
-          toolbar.setLogo(R.mipmap.ic_launcher);
-          toolbar.setTitle("Title");
-          toolbar.setSubtitle("Sub Title");
-          */
         mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         if (mToolbar != null) {
             //将Toolbar显示到界面
@@ -36,7 +43,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             //设置默认的标题不显示
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
-
     }
 
     @Override
@@ -48,6 +54,56 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         if(null != getToolbar() && isShowBacking()){
             showBack();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.log_off:
+                Intent intent = new Intent(this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.upload_file:
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void startActivity(Context cur, Class toStart) {
+        Intent intent = new Intent();
+        intent.setClass(cur, toStart);
+        Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
+        startActivity(intent, bundle);
+    }
+    /**
+     * 设置转场动画
+     */
+
+    public void setAnimation(int type){
+        switch (type){
+            case EXPLODE:
+                getWindow().setEnterTransition(new Explode().setDuration(300));
+                getWindow().setExitTransition(new Explode().setDuration(300));
+                break;
+            case FADE:
+                getWindow().setEnterTransition(new Fade().setDuration(300));
+                getWindow().setExitTransition(new Fade().setDuration(300));
+                break;
+            case SLIDE:
+                getWindow().setEnterTransition(new Slide().setDuration(300));
+                getWindow().setExitTransition(new Fade().setDuration(200));
+                break;
+
+        }
+
     }
 
     /**
@@ -89,7 +145,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                finish();
             }
         });
     }
@@ -113,10 +169,14 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * 用于butterknife的绑定
      */
     protected abstract void bindView();
+//
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
+
+
 }

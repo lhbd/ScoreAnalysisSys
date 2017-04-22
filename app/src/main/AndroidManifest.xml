@@ -23,6 +23,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"/>
         <activity android:name=".activity.TMainActivity"/>
+
+        <activity android:name=".activity.ScoreDetailActivity"/>
+        <activity android:name=".activity.HelloChartsDemo"/>
     </application>
 
 

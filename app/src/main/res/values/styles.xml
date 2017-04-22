@@ -15,15 +15,17 @@
         <item name="android:windowBackground">@android:color/white</item>
 
         <item name="actionOverflowMenuStyle">@style/MenuStyle</item>
+
     </style>
 
     <!--菜单样式-->
-    <style name="MenuStyle" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
+    <style name="MenuStyle" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="overlapAnchor">false</item>
         <!--菜单与toolbar的距离-->
         <item name="android:dropDownVerticalOffset">5dp</item>
         <!--菜单背景色-->
-        <item name="android:popupBackground">?attr/colorPrimaryDark</item>
+        <item name="android:popupBackground">@android:color/black</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
 

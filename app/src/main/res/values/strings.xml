@@ -18,6 +18,8 @@
     
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
+    <string name="log_off">注销</string>
+    <string name="upload_file">上传文件</string>
 
     <string name="register_school_name">请输入学校名</string>
     <string name="register_degree_teacher">老师</string>
@@ -25,5 +27,7 @@
 
     <string name="register_input_school">请输入有效的学校名</string>
     <string name="register_check_degree">请选择你的身份</string>
+
+    <string name="show_all_score">成绩一览</string>
 
 </resources>
