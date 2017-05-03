@@ -26,6 +26,8 @@
 
         <activity android:name=".activity.ScoreDetailActivity"/>
         <activity android:name=".activity.HelloChartsDemo"/>
+        <activity android:name=".activity.UserMessageActivity" />
+        <activity android:name=".activity.ClassResultActivity"/>
     </application>
 
 

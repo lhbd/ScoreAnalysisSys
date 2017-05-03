@@ -131,13 +131,13 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
 
     private void initWidget() {
 
-        loginPresent = new LoginPresent(this);
+        loginPresent = new LoginPresent(this,getSp());
         userMessage.setText(loginPresent.getString("userMessage", ""));
         initRegisterString();
         initCheckBoxForRemPwd();
         initCheckBoxForAutoLogin();
         initLoginMessage();
-        if (userMessage.getText().equals("")) {
+            if (userMessage.getText().equals("")) {
             openRegisterDialog();
         }
 
@@ -159,7 +159,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
         spa.setSpan(new ForegroundColorSpan(Color.parseColor("#FF0066CC")), length - 3, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         //设置下划线
         spa.setSpan(new UnderlineSpan(), length - 3, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //设置背景色
+        //设置点击事件
         spa.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View view) {
@@ -249,7 +249,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                 if (remPwd.isChecked()) {
                     loginPresent.saveUser(userEdit.getText().toString(), pwdEdit.getText().toString());
                }
-                startActivity(LoginActivity.this, TMainActivity.class);
+                startActivity(LoginActivity.this, ClassResultActivity.class);
                 finish();
             }
         }, entity);

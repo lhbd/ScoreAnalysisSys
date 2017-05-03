@@ -2,6 +2,7 @@ package com.gdin.analyse.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 
 public class LoginDataEntity implements Parcelable{
@@ -11,6 +12,7 @@ public class LoginDataEntity implements Parcelable{
     private int loginClassId;
     private String loginType;
     private String loginUser;
+    @Nullable
     private String loginPwd;
 
     @Override

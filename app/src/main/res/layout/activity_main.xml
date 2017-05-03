@@ -15,7 +15,6 @@
     <include layout="@layout/login_cardview_layout"/>
 
     <TextView  android:id="@+id/find"
-        android:layout_below="@id/login_div"
         android:layout_margin="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

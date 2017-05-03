@@ -18,8 +18,21 @@
     
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
+
+    <string name="reset_pwd">修改密码</string>
+    <string name="cur_pwd">原密码：</string>
+    <string name="new_pwd">新密码：</string>
+    <string name="input_cur_pwd">请输入原密码</string>
+    <string name="input_new_pwd">请输入新密码</string>
+    <string name="input_new_pwd_again">请再次输入新密码</string>
+    <string name="cur_pwd_null">* 原密码不能为空！</string>
+    <string name="new_pwd_null">* 新密码不能为空！</string>
+    <string name="new_pwd_again_null">* 新密码不能为空！</string>
+    <string name="new_pwd_error">* 两次输入的新密码不相同！</string>
+
     <string name="log_off">注销</string>
-    <string name="upload_file">上传文件</string>
+    <string name="user_message">个人信息</string>
+    <string name="help">帮助</string>
 
     <string name="register_school_name">请输入学校名</string>
     <string name="register_degree_teacher">老师</string>
@@ -29,5 +42,18 @@
     <string name="register_check_degree">请选择你的身份</string>
 
     <string name="show_all_score">成绩一览</string>
+    <string name="show_user_message">个人信息页</string>
+
+
+    <string name="score_detail">总分一览：</string>
+    <string name="score_ch">语文得分：</string>
+    <string name="score_math">数学得分：</string>
+    <string name="score_eh">英语得分：</string>
+    <string name="score_grade">年级</string>
+    <string name="score_class">班级</string>
+    <string name="score_max">最高分</string>
+    <string name="score_avg">平均分</string>
+
+
 
 </resources>

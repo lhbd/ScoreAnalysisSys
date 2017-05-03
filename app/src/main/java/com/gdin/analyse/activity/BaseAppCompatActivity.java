@@ -3,6 +3,7 @@ package com.gdin.analyse.activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.gdin.analyse.R;
+import com.gdin.analyse.tools.CustomApplication;
 
 public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public static final int EXPLODE = 0;       //分解动画
@@ -23,6 +25,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public static final int SLIDE = 2;         //滑进滑出
     private TextView mToolbarTitle;
     private Toolbar mToolbar;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
             //设置默认的标题不显示
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
+        sp = CustomApplication.getContext().getSharedPreferences("loginUser", MODE_PRIVATE); //context类中使用getSharedPreferences，第一个参数为文件名
     }
 
     @Override
@@ -65,16 +69,23 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.user_message:
+                startActivity(UserMessageActivity.class);
+                break;
             case R.id.log_off:
-                Intent intent = new Intent(this,LoginActivity.class);
-                startActivity(intent);
+                sp.edit().putBoolean("autoLogin", false).apply();
+                startActivity(LoginActivity.class);
                 finish();
                 break;
-            case R.id.upload_file:
+            case R.id.help:
                 break;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void startActivity(Class toStart){
+        Intent intent = new Intent(this,toStart);
+        startActivity(intent);
     }
 
     public void startActivity(Context cur, Class toStart) {
@@ -82,6 +93,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         intent.setClass(cur, toStart);
         Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
         startActivity(intent, bundle);
+    }
+
+    public SharedPreferences getSp(){
+        if (sp == null){
+            sp = CustomApplication.getContext().getSharedPreferences("loginUser", MODE_PRIVATE); //context类中使用getSharedPreferences，第一个参数为文件名
+        }
+        return sp;
     }
     /**
      * 设置转场动画

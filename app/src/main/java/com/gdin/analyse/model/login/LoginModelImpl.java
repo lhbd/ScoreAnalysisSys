@@ -5,17 +5,15 @@ import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import com.gdin.analyse.entity.LoginDataEntity;
-import com.gdin.analyse.tools.CustomApplication;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class LoginModelImpl implements LoginModel {
 
     private SharedPreferences sp;
 
     @Override
-    public void initSharedPreferences() {
-        sp = CustomApplication.getContext().getSharedPreferences("loginUser", MODE_PRIVATE); //context类中使用getSharedPreferences，第一个参数为文件名
+    public void initSharedPreferences(SharedPreferences sp) {
+        this.sp =sp;
+//        sp = CustomApplication.getContext().getSharedPreferences("loginUser", MODE_PRIVATE); //context类中使用getSharedPreferences，第一个参数为文件名
     }
 
     @Override

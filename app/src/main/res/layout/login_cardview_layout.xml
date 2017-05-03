@@ -47,8 +47,8 @@
             android:layout_below="@id/login_user_input"
             android:background="@drawable/bg_edittext"
             android:maxLines="1"
-            android:inputType="number"
             android:layout_marginTop="8dp"
+            android:inputType="number"
             android:digits="@string/login_digit_element"/>
         <!-- 密码 text -->
         <TextView

@@ -1,6 +1,7 @@
 package com.gdin.analyse.present;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
 import com.gdin.analyse.entity.LoginDataEntity;
@@ -13,10 +14,10 @@ public class LoginPresent {
     LoginModel model;
     LoginView view;
 
-    public LoginPresent(LoginView loginView) {
+    public LoginPresent(LoginView loginView,SharedPreferences sp) {
         this.view = loginView;
         model= new LoginModelImpl();
-        model.initSharedPreferences();
+        model.initSharedPreferences(sp);
     }
     public void updateCheckState(String value, boolean isChecked){
         model.updateCheckState(value,isChecked);

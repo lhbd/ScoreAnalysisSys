@@ -2,6 +2,7 @@ package com.gdin.analyse.activity;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +46,8 @@ public class ScoreDetailActivity extends BaseAppCompatActivity implements ScoreD
             public void onItemClick(RecyclerView.ViewHolder holder) {
                 if (holder.getItemViewType()!=ScoreDetailAdapter.COURSE_SCORE)
                 {
-                    startActivity(ScoreDetailActivity.this,HelloChartsDemo.class);
+                    Intent i = new Intent(ScoreDetailActivity.this,HelloChartsDemo.class);
+                    startActivity(i);
                 }else{
                     int pos = holder.getAdapterPosition();
                     ImageButton drop = ((BaseViewHolder)holder).getView(R.id.course_score_drop);
