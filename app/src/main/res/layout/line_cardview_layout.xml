@@ -17,26 +17,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
-        >
+        android:orientation="horizontal">
+
         <com.gdin.analyse.chart.LineChartView
-            android:id="@+id/ldc_line_chart"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="6dp"
-            android:background="#918f8f" />
-
-        <lecho.lib.hellocharts.view.ColumnChartView
-            android:id="@+id/ldc_column_chart"
+            android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:transitionName="line_depend_column" />
+            android:transitionName="pie"
+            />
     </LinearLayout>
+
 
 
 </android.support.v7.widget.CardView>

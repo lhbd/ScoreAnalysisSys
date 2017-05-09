@@ -1,13 +1,15 @@
 package com.gdin.analyse.fragment;
 
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * 基类Fragment
@@ -19,6 +21,7 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isVisible;
     private boolean isPrepared;
     private boolean isFirst = true;
+    private Unbinder unbinder;
 
     public BaseFragment() {
         // Required empty public constructor
@@ -54,7 +57,7 @@ public abstract class BaseFragment extends Fragment {
         if (mRootView == null) {
             mRootView = initView();
         }
-//        Log.d("TAG", "fragment->onCreateView");
+        unbinder = ButterKnife.bind(this,mRootView);
         return mRootView;
     }
 
@@ -62,7 +65,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        Log.d("TAG", "fragment->onActivityCreated");
         isPrepared = true;
         lazyLoad();
     }
@@ -70,23 +72,26 @@ public abstract class BaseFragment extends Fragment {
 
 
     protected void lazyLoad() {
-        if (!isPrepared || !isVisible || !isFirst) {
+        if (!isPrepared || !isVisible) {
             return;
         }
-        Log.d("TAG", getClass().getName() + "->getScoreData()");
+        showBtn();
+        if (!isFirst)
+            return;
         initData(mRootView);
         isFirst = false;
+
+
     }
 
     //do something
     protected void onInvisible() {
-
-
     }
 
     public abstract View initView();
 
     public abstract void initData(View view);
+    public abstract void showBtn();
 
     //与onCreateView想对应，当该Fragment的视图被移除时调用
     @Override
@@ -94,4 +99,11 @@ public abstract class BaseFragment extends Fragment {
         super.onDestroyView();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (unbinder==null)
+            return;
+        unbinder.unbind();
+    }
 }

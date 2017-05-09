@@ -1,4 +1,4 @@
-package com.gdin.analyse.fragment.charts;
+package com.gdin.analyse.chart;
 
 import android.content.Context;
 import android.util.AttributeSet;

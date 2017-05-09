@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 public class LoginDataEntity implements Parcelable{
 
+    private int tokenId;
     private int loginSchoolId;
     private int loginGradeId;
     private int loginClassId;
@@ -94,6 +95,14 @@ public class LoginDataEntity implements Parcelable{
 
     public String getLoginUser() {
         return loginUser;
+    }
+
+    public int getTokenId() {
+        return tokenId;
+    }
+
+    public void setTokenId(int tokenId) {
+        this.tokenId = tokenId;
     }
 
     public void setLoginClassId(int loginClassId) {

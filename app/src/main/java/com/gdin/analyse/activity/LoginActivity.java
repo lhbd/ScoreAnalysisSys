@@ -26,10 +26,9 @@ import com.gdin.analyse.entity.LoginDataEntity;
 import com.gdin.analyse.info.HttpMethods;
 import com.gdin.analyse.present.LoginPresent;
 import com.gdin.analyse.subscribers.cSubscriber;
+import com.gdin.analyse.tools.CustomApplication;
 import com.gdin.analyse.tools.StringUtils;
 import com.gdin.analyse.view.LoginView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +62,9 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initWidget();
-
+        userMessage.setFocusable(true);
+        userMessage.setFocusableInTouchMode(true);
+        userMessage.requestFocus();
     }
 
     @Override
@@ -74,6 +75,11 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     @Override
     protected void bindView() {
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void setDialog() {
+
     }
 
     @Override
@@ -98,6 +104,7 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                 openRegisterDialog();
                 break;
             case R.id.login_button:
+//                onclick();
                 onclickLoginBtn();
                 break;
             case R.id.user_picture:
@@ -235,26 +242,31 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                 loginPresent.getInt("loginGradeId", 0), loginPresent.getInt("loginClassId", 0), loginPresent.getString("loginType", ""),
                 userEdit.getText().toString(), pwdEdit.getText().toString());
 
-        HttpMethods.getInstance().checkLogin(new cSubscriber<HttpResult<List<LoginDataEntity>>>() {
+        HttpMethods.getInstance().checkLogin(new cSubscriber<HttpResult<LoginDataEntity>>() {
             @Override
             public void onComplete() {
             }
 
             @Override
-            public void onNext(HttpResult<List<LoginDataEntity>> listHttpResult, int i) {
-//                int code = listHttpResult.getCode();
-//                if (code!=200){
-//                    throw new ApiException(code);
-//                }
+            public void onNext(HttpResult<LoginDataEntity> result, int i) {
+                int code = result.getCode();
+                if (code!=200){
+                    Toast.makeText(getApplicationContext(),result.getMessage(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (remPwd.isChecked()) {
                     loginPresent.saveUser(userEdit.getText().toString(), pwdEdit.getText().toString());
                }
+                LoginDataEntity entity = result.getData();
+                CustomApplication.setTokenId(entity.getTokenId());
+                CustomApplication.setSchoolId(entity.getLoginSchoolId());
+                CustomApplication.setGradeId(entity.getLoginGradeId());
+                CustomApplication.setClassId(entity.getLoginClassId());
                 startActivity(LoginActivity.this, ClassResultActivity.class);
                 finish();
             }
         }, entity);
     }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();

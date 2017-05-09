@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_10"
+    >
+    <EditText
+        android:id="@+id/search_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@null"
+        android:maxLines="1"
+        android:hint="输入学生姓名或者学号"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/student_roll"
+        android:layout_below="@id/search_et"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

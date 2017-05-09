@@ -25,6 +25,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     public static final int SLIDE = 2;         //滑进滑出
     private TextView mToolbarTitle;
     private Toolbar mToolbar;
+    private MenuItem menuItem;
     SharedPreferences sp;
 
     @Override
@@ -55,7 +56,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         /**
          * 判断是否有Toolbar,并默认显示返回按钮
          */
-        if(null != getToolbar() && isShowBacking()){
+        if(null != getToolbar() &&  isShowBacking()){
             showBack();
         }
     }
@@ -63,12 +64,17 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
-        return true;
+        menuItem = menu.findItem(R.id.select_btn);
+        menuItem.setVisible(false);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.select_btn:
+                setDialog();
+                break;
             case R.id.user_message:
                 startActivity(UserMessageActivity.class);
                 break;
@@ -132,6 +138,11 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         return mToolbarTitle;
     }
 
+    protected MenuItem getItem(){
+        return menuItem;
+    }
+
+
     /**
      * 设置头部标题
      * @param title
@@ -187,6 +198,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      * 用于butterknife的绑定
      */
     protected abstract void bindView();
+
+    protected abstract void setDialog();
 //
 
 

@@ -1,11 +1,14 @@
 package com.gdin.analyse.entity;
 
+import android.support.annotation.Nullable;
+
 public class HttpResult<T> {
 
     private int code;
     private String message;
 
     //返回的数据
+    @Nullable
     private T data;
 
 

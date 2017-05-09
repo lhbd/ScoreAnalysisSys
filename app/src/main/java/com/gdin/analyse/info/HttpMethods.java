@@ -1,7 +1,10 @@
 package com.gdin.analyse.info;
 
+import com.gdin.analyse.entity.ClassResultEntity;
+import com.gdin.analyse.entity.ExamDataEntity;
 import com.gdin.analyse.entity.HttpResult;
 import com.gdin.analyse.entity.LoginDataEntity;
+import com.gdin.analyse.entity.ResetPwdEntity;
 import com.gdin.analyse.entity.SchoolEntity;
 
 import java.util.List;
@@ -60,8 +63,29 @@ public class HttpMethods {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
-    public void checkLogin(Subscriber<HttpResult<List<LoginDataEntity>>> subscriber,LoginDataEntity entity){
+    public void checkLogin(Subscriber<HttpResult<LoginDataEntity>> subscriber,LoginDataEntity entity){
         info.checkLogin(entity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+    public void resetPwd(Subscriber<HttpResult> subscriber,ResetPwdEntity entity){
+        info.resetPwd(entity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+    public void getExam(Subscriber<HttpResult<List<ExamDataEntity>>> subscriber, ExamDataEntity entity){
+        info.getExam(entity)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+    public void getClassScore(Subscriber<HttpResult<ClassResultEntity>> subscriber, ClassResultEntity entity){
+        info.getClassScore(entity)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

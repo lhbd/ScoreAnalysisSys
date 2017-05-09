@@ -11,7 +11,7 @@
     <string name="login_auto">自动登录</string>
     <string name="login_digit_element">0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
-    <string name="degree_school">学校</string>
+    <string name="degree_school">学校：</string>
     <string name="degree_grade">年级</string>
     <string name="degree_class">班级</string>
     <string name="degree_power">身份</string>
@@ -26,9 +26,11 @@
     <string name="input_new_pwd">请输入新密码</string>
     <string name="input_new_pwd_again">请再次输入新密码</string>
     <string name="cur_pwd_null">* 原密码不能为空！</string>
+    <string name="cur_pwd_error">* 原密码错误！</string>
+    <string name="new_pwd_error">* 新密码必须跟原密码不同！</string>
     <string name="new_pwd_null">* 新密码不能为空！</string>
     <string name="new_pwd_again_null">* 新密码不能为空！</string>
-    <string name="new_pwd_error">* 两次输入的新密码不相同！</string>
+    <string name="two_no_same">* 两次输入的新密码不相同！</string>
 
     <string name="log_off">注销</string>
     <string name="user_message">个人信息</string>
@@ -45,14 +47,16 @@
     <string name="show_user_message">个人信息页</string>
 
 
-    <string name="score_detail">总分一览：</string>
+    <string name="exam_detail">基本信息</string>
+    <string name="score_detail">总分一览</string>
     <string name="score_ch">语文得分：</string>
     <string name="score_math">数学得分：</string>
-    <string name="score_eh">英语得分：</string>
-    <string name="score_grade">年级</string>
-    <string name="score_class">班级</string>
-    <string name="score_max">最高分</string>
-    <string name="score_avg">平均分</string>
+    <string name="score_en">英语得分：</string>
+    <string name="grade_max">年级最高分</string>
+    <string name="grade_avg">年级平均分</string>
+    <string name="class_max">班级最高分</string>
+    <string name="class_avg">班级平均分</string>
+    <string name="show_detail">查看详情</string>
 
 
 

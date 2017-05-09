@@ -1,10 +1,9 @@
-package com.gdin.analyse.fragment.charts;
+package com.gdin.analyse.chart;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
@@ -88,8 +87,7 @@ public  class PieChartCardView extends BaseFrameLayout {
         @Override
         public void onValueSelected(int arcIndex, SliceValue value) {
             requestDisallowInterceptTouchEvent(false);
-            ((ClassResultActivity)getContext()).addFragment();
-            Toast.makeText(getContext(), "当前选中块约占: " + (int) value.getValue() + " %", Toast.LENGTH_SHORT).show();
+            ((ClassResultActivity)getContext()).addStudentRollFragment();
         }
 
         @Override

@@ -45,6 +45,7 @@ public class RegisterModelImpl implements RegisterModel {
                     schoolEntityList.add(entity);
                     list.add(entity.getSchoolName());
                 }
+
             }
         });
         return list;
@@ -52,6 +53,7 @@ public class RegisterModelImpl implements RegisterModel {
 
     @Override
     public List<String> getGradeName() {
+
         List<String> list = new ArrayList<>();
         for (GradeEntity entity : gradeEntityList){
             list.add(entity.getGradeName());

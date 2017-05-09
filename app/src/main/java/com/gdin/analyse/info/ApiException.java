@@ -2,6 +2,7 @@ package com.gdin.analyse.info;
 public class ApiException extends RuntimeException {
 
     public static final int LOGIN_FAIL = -1;
+    public static final int PWD_ERROR = 1;
 
     public ApiException(int resultCode) {
         this(getApiExceptionMessage(resultCode));
@@ -23,6 +24,10 @@ public class ApiException extends RuntimeException {
             case LOGIN_FAIL:
                 message = "该用户不存在或密码错误";
                 break;
+            case PWD_ERROR:
+                message = "密码错误";
+                break;
+
             default:
                 message = "未知错误";
 
