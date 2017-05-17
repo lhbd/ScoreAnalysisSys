@@ -78,8 +78,23 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
     }
 
     @Override
-    protected void setDialog() {
+    protected void startAction() {
 
+    }
+
+
+    @Override
+    protected void isShowBacking() {
+        showBack(false);
+    }
+
+    @Override
+    protected void onClickBack() {
+
+    }
+
+    @Override
+    protected void isShowMenuItem() {
     }
 
     @Override
@@ -91,7 +106,6 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
             buffer.append(data.getStringExtra("gradeName"));
             buffer.append(" -- ");
             buffer.append(data.getStringExtra("className"));
-
             userMessage.setText(buffer);
             loginPresent.saveRegister(buffer, data);
         }
@@ -259,9 +273,6 @@ public class LoginActivity extends BaseAppCompatActivity implements LoginView {
                }
                 LoginDataEntity entity = result.getData();
                 CustomApplication.setTokenId(entity.getTokenId());
-                CustomApplication.setSchoolId(entity.getLoginSchoolId());
-                CustomApplication.setGradeId(entity.getLoginGradeId());
-                CustomApplication.setClassId(entity.getLoginClassId());
                 startActivity(LoginActivity.this, ClassResultActivity.class);
                 finish();
             }

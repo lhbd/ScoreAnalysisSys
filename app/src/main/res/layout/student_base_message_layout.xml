@@ -29,22 +29,6 @@
         android:text="试卷名："
         />
     <TextView
-        android:id="@+id/school_label"
-        android:layout_below="@id/s_exam_name_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_4"
-        android:text="姓名："
-        />
-    <TextView
-        android:id="@+id/grade_class_label"
-        android:layout_below="@id/school_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_4"
-        android:text="学号："
-        />
-    <TextView
         android:id="@+id/s_exam_name_value"
         android:layout_below="@id/base_title"
         android:layout_toEndOf="@id/s_exam_name_label"
@@ -54,18 +38,35 @@
         android:text="五月统考"
         />
     <TextView
-        android:id="@+id/school_value"
-        android:layout_below="@id/s_exam_name_value"
-        android:layout_toEndOf="@id/school_label"
+        android:id="@+id/s_name_label"
+        android:layout_below="@id/s_exam_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        android:text="姓名："
+        />
+    <TextView
+        android:id="@+id/s_name_value"
+        android:layout_below="@id/s_exam_name_label"
+        android:layout_toEndOf="@id/s_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"
         android:text="哈哈"
         />
     <TextView
-        android:id="@+id/grade_class_value"
-        android:layout_below="@id/school_label"
-        android:layout_toEndOf="@id/grade_class_label"
+        android:id="@+id/s_num_label"
+        android:layout_below="@id/s_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_4"
+        android:text="学号："
+        />
+
+    <TextView
+        android:id="@+id/s_num_value"
+        android:layout_below="@id/s_name_label"
+        android:layout_toEndOf="@id/s_num_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"

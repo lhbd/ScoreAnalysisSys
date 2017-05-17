@@ -69,8 +69,6 @@ public abstract class BaseFragment extends Fragment {
         lazyLoad();
     }
 
-
-
     protected void lazyLoad() {
         if (!isPrepared || !isVisible) {
             return;
@@ -80,8 +78,14 @@ public abstract class BaseFragment extends Fragment {
             return;
         initData(mRootView);
         isFirst = false;
+    }
 
+    public void setFirst(boolean first) {
+        isFirst = first;
+    }
 
+    public View getmRootView() {
+        return mRootView;
     }
 
     //do something

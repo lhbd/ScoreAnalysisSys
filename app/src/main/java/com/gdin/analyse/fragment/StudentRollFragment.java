@@ -32,7 +32,7 @@ public class StudentRollFragment extends BaseFragment {
         adapter.setonClickForDetailListener(new StudentRollAdapter.onClickForDetailListener() {
             @Override
             public void onClickForDetail() {
-                ((ClassResultActivity)getContext()).addStudentScoreDetailFragment();
+                ((ClassResultActivity)getContext()).addFragment(StudentScoreDetailFragment.newInstance(),3);
             }
         });
         RecyclerView studentRoll = (RecyclerView)view.findViewById(R.id.student_roll);
@@ -50,7 +50,8 @@ public class StudentRollFragment extends BaseFragment {
             return;
         }
         activity.getToolbarTitle().setText("学生名单一览");
-        activity.showItem(true);
+        activity.resetMenuItem(2);
+        activity.showBack(true);
     }
 
     private void setEditChangeListener(final List<StudentRollEntity> data){

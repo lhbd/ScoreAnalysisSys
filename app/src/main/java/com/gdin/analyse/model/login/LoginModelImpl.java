@@ -38,6 +38,9 @@ public class LoginModelImpl implements LoginModel {
         sp.edit().putInt("loginGradeId",data.getIntExtra("loginGradeId",0)).apply();
         sp.edit().putInt("loginClassId",data.getIntExtra("loginClassId",0)).apply();
         sp.edit().putString("loginType",data.getStringExtra("loginType")).apply();
+        sp.edit().putString("schoolName",data.getStringExtra("schoolName")).apply();
+        sp.edit().putString("gradeName",data.getStringExtra("gradeName")).apply();
+        sp.edit().putString("className",data.getStringExtra("className")).apply();
     }
 
     @Override

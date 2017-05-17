@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gdin.analyse.R;
@@ -31,8 +32,14 @@ import lecho.lib.hellocharts.util.ChartUtils;
  */
 public class LineChartCardView extends BaseFrameLayout {
 
+    private final static int SUM_SCORE = 0;
+    private final static int CH_SCORE = 1;
+    private final static int MATH_SCORE = 2;
+    private final static int EN_SCORE = 3;
+
     /*=========== 控件相关 ==========*/
     private LineChartView mLineChartView;               //线性图表控件
+    private TextView lineLabel;
 
     /*=========== 数据相关 ==========*/
     private LineChartData mLineData;                    //图表数据
@@ -49,7 +56,6 @@ public class LineChartCardView extends BaseFrameLayout {
     private boolean isHasPointsLabels = false;          //是否显示节点上的标签信息
     private boolean isCubic = false;                    //是否是立体的
     private boolean isPointsHasSelected = false;        //设置节点点击后效果(消失/显示标签)
-    private boolean isPointsHaveDifferentColor;         //节点是否有不同的颜色
 
     /*=========== 其他相关 ==========*/
     private ValueShape pointsShape = ValueShape.CIRCLE; //点的形状(圆/方/菱形)
@@ -73,6 +79,7 @@ public class LineChartCardView extends BaseFrameLayout {
         View view = View.inflate(getContext(), R.layout.line_cardview_layout, null);
         addView(view);
         mLineChartView = (LineChartView) view.findViewById(R.id.line);
+        lineLabel = (TextView)view.findViewById(R.id.line_label);
         /**
          * 禁用视图重新计算 主要用于图表在变化时动态更改，不是重新计算
          * 类似于ListView中数据变化时，只需notifyDataSetChanged()，而不用重新setAdapter()
@@ -80,7 +87,21 @@ public class LineChartCardView extends BaseFrameLayout {
         mLineChartView.setViewportCalculationEnabled(false);
     }
 
-    public void setData() {
+    public void setData(int type) {
+        switch (type){
+            case SUM_SCORE:
+                lineLabel.setText("总分得分详情");
+                break;
+            case CH_SCORE:
+                lineLabel.setText("语文得分详情");
+                break;
+            case MATH_SCORE:
+                lineLabel.setText("数学得分详情");
+                break;
+            case EN_SCORE:
+                lineLabel.setText("英语得分详情");
+                break;
+        }
         setPointsValues();          //设置每条线的节点值
         setLinesDatas();            //设置每条线的一些属性
         resetViewport();            //计算并绘图
@@ -119,7 +140,7 @@ public class LineChartCardView extends BaseFrameLayout {
 
             /*========== 设置线的一些属性 ==========*/
             Line line = new Line(values);               //根据值来创建一条线
-            line.setColor(ChartUtils.COLORS[i]);        //设置线的颜色
+            line.setColor(ChartUtils.COLORS[3]);        //设置线的颜色
             line.setShape(pointsShape);                 //设置点的形状
             line.setHasLines(isHasLines);               //设置是否显示线
             line.setHasPoints(isHasPoints);             //设置是否显示节点
@@ -128,10 +149,8 @@ public class LineChartCardView extends BaseFrameLayout {
             line.setHasLabels(isHasPointsLabels);       //设置是否显示节点标签
             //设置节点点击的效果
             line.setHasLabelsOnlyForSelected(isPointsHasSelected);
-            //如果节点与线有不同颜色 则设置不同颜色
-            if (isPointsHaveDifferentColor) {
-                line.setPointColor(ChartUtils.COLORS[(i + 1) % ChartUtils.COLORS.length]);
-            }
+            //节点与线有不同颜色
+            line.setPointColor(ChartUtils.COLORS[3]);
             lines.add(line);
         }
 
@@ -166,6 +185,8 @@ public class LineChartCardView extends BaseFrameLayout {
         }
 
         mLineChartView.setLineChartData(mLineData);    //设置图表控件
+        changeLinesAnimate();
+//        dynamicDataDisplay();
     }
 
     /**

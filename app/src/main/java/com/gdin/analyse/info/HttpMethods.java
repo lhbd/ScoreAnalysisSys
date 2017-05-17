@@ -20,7 +20,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class HttpMethods {
-    private final static String BASE_URL = "http://120.77.34.81/";
+    private final static String BASE_URL = "http://120.25.97.250:8080/";
+//    private final static String BASE_URL = "http://120.77.34.81/";
 
     private static final int DEFAULT_TIMEOUT = 5;
 

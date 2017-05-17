@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/select_btn"
-        android:title="筛选"
-        android:icon="@mipmap/ic_action_filter"
+    <item android:id="@+id/action_btn"
+        android:title="action"
+        android:icon="@mipmap/ic_action_chart"
         app:showAsAction="always"
         />
     <item android:id="@+id/user_message"

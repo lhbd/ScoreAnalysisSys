@@ -1,5 +1,6 @@
 package com.gdin.analyse.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +13,13 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
 import com.gdin.analyse.adapter.ExamDialogAdapter;
+import com.gdin.analyse.entity.ClassResultEntity;
 import com.gdin.analyse.entity.ExamDataEntity;
 import com.gdin.analyse.entity.HttpResult;
 import com.gdin.analyse.info.HttpMethods;
-import com.gdin.analyse.model.teacher.ClassResultScoreEntity;
+import com.gdin.analyse.listener.OnRecyclerItemClickListener;
 import com.gdin.analyse.subscribers.cSubscriber;
 import com.gdin.analyse.tools.CustomApplication;
-import com.gdin.analyse.listener.OnRecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,11 @@ public class ClassResultFragment extends BaseFragment {
     @BindView(R.id.class_en_avg_value)
     TextView classEnAvgValue;
 
+    SharedPreferences sp;
+
+    ArrayList<Integer>  subjectValues = new ArrayList<>();
+
+
     @Override
     public View initView() {
         return View.inflate(getContext(), R.layout.class_score_layout, null);
@@ -78,13 +84,12 @@ public class ClassResultFragment extends BaseFragment {
 
     @Override
     public void initData(View view) {
-        final Bundle bundle = getArguments();
-        if (bundle == null)
-            return;
-        final List<ClassResultScoreEntity> data = bundle.getParcelableArrayList("data");
-        if (data == null)
-            return;
-
+        sp = ((ClassResultActivity)getActivity()).getSp();
+        schoolValue.setText(sp.getString("schoolName",""));
+        gradeClassValue.setText(new StringBuffer().append(sp.getString("gradeName",""))
+                .append(sp.getString("className","")));
+        getGradeData();
+        getClassData();
     }
 
     @Override
@@ -93,7 +98,9 @@ public class ClassResultFragment extends BaseFragment {
         if (activity == null)
             return;
         activity.getToolbarTitle().setText("班级成绩一览");
-        activity.showItem(false);
+        activity.resetMenuItem(0);
+        activity.showBack(false);
+
     }
 
     private void initDialog(final List<ExamDataEntity> itemList) {
@@ -120,6 +127,65 @@ public class ClassResultFragment extends BaseFragment {
         });
     }
 
+    private void getClassData(){
+        HttpMethods.getInstance().getClassScore(new cSubscriber<HttpResult<ClassResultEntity>>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<ClassResultEntity> result, int i) {
+                setClassResult(result.getData());
+            }
+        },new ClassResultEntity(sp.getInt("loginSchoolId",0),sp.getInt("loginGradeId",0),
+                sp.getInt("loginClassId",0),CustomApplication.getExamName()));
+    }
+    private void getGradeData(){
+        HttpMethods.getInstance().getClassScore(new cSubscriber<HttpResult<ClassResultEntity>>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<ClassResultEntity> result, int i) {
+                setGradeResult(result.getData());
+            }
+        },new ClassResultEntity(sp.getInt("loginSchoolId",0),sp.getInt("loginGradeId",0),
+                0,CustomApplication.getExamName()));
+    }
+    private void setClassResult(ClassResultEntity entity ){
+        examNameLabelValue.setText(CustomApplication.getExamName());
+        examNumberValue.setText(String.valueOf(entity.getNumber()));
+        classMaxValue.setText(String.valueOf(entity.getSumBest()));
+        classAvgValue.setText(String.valueOf(entity.getSumAvg()));
+        classChMaxValue.setText(String.valueOf(entity.getChBest()));
+        classChAvgValue.setText(String.valueOf(entity.getChAvg()));
+        classMathMaxValue.setText(String.valueOf(entity.getMathBest()));
+        classMathAvgValue.setText(String.valueOf(entity.getMathAvg()));
+        classEnMaxValue.setText(String.valueOf(entity.getEnBest()));
+        classEnAvgValue.setText(String.valueOf(entity.getEnAvg()));
+        subjectValues.add((int)entity.getSumBest());
+        subjectValues.add((int)entity.getSumAvg());
+        subjectValues.add((int)entity.getChBest());
+        subjectValues.add((int)entity.getChAvg());
+        subjectValues.add((int)entity.getMathBest());
+        subjectValues.add((int)entity.getMathAvg());
+        subjectValues.add((int)entity.getEnBest());
+        subjectValues.add((int)entity.getEnAvg());
+    }
+    private void setGradeResult(ClassResultEntity entity ){
+        gradeScoreMaxValue.setText(String.valueOf(entity.getSumBest()));
+        gradeScoreAvgValue.setText(String.valueOf(entity.getSumAvg()));
+        gradeChMaxValue.setText(String.valueOf(entity.getChBest()));
+        gradeChAvgValue.setText(String.valueOf(entity.getChAvg()));
+        gradeMathMaxValue.setText(String.valueOf(entity.getMathBest()));
+        gradeMathAvgValue.setText(String.valueOf(entity.getMathAvg()));
+        gradeEnMaxValue.setText(String.valueOf(entity.getEnBest()));
+        gradeEnAvgValue.setText(String.valueOf(entity.getEnAvg()));
+    }
+
     private void getExamData() {
         HttpMethods.getInstance().getExam(new cSubscriber<HttpResult<List<ExamDataEntity>>>() {
             @Override
@@ -129,33 +195,39 @@ public class ClassResultFragment extends BaseFragment {
             public void onNext(HttpResult<List<ExamDataEntity>> result, int i) {
                 initDialog(result.getData());
             }
-        }, new ExamDataEntity(CustomApplication.getSchoolId(), CustomApplication.getGradeId(), CustomApplication.getClassId()));
+        }, new ExamDataEntity(sp.getInt("loginSchoolId",0),sp.getInt("loginGradeId",0),
+                sp.getInt("loginClassId",0)));
     }
 
-    public static ClassResultFragment newInstance(ArrayList<ClassResultScoreEntity> data) {
+    public static ClassResultFragment newInstance() {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("data", data);
         ClassResultFragment fragment = new ClassResultFragment();
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    public ArrayList<Integer> getSubjectValues() {
+        return subjectValues;
     }
 
     @OnClick({R.id.score_confirm_label, R.id.ch_confirm_label, R.id.math_confirm_label, R.id.en_confirm_label, R.id.t_select_exam})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.score_confirm_label:
-                ((ClassResultActivity)getContext()).addClassChartFragment();
+                ((ClassResultActivity)getContext()).updateFragment(0);
                 break;
             case R.id.ch_confirm_label:
-                ((ClassResultActivity)getContext()).addClassChartFragment();
+                ((ClassResultActivity)getContext()).updateFragment(1);
                 break;
             case R.id.math_confirm_label:
-                ((ClassResultActivity)getContext()).addClassChartFragment();
+                ((ClassResultActivity)getContext()).updateFragment(2);
                 break;
             case R.id.en_confirm_label:
-                ((ClassResultActivity)getContext()).addClassChartFragment();
+                ((ClassResultActivity)getContext()).updateFragment(3);
                 break;
             case R.id.t_select_exam:
+//                ((ClassResultActivity)getContext()).resetFragment();
+
                 getExamData();
                 break;
             default:

@@ -74,18 +74,6 @@
             >
             <include layout="@layout/class_en_detail_layout"/>
         </android.support.v7.widget.CardView>
-
-
-        <TextView
-            android:id="@+id/t_select_exam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/dp_10"
-            android:clickable="true"
-            android:text="点击切换试卷"
-            />
-
     </LinearLayout>
 
 </ScrollView>

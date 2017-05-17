@@ -14,6 +14,7 @@
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false"
     >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +24,8 @@
         <com.gdin.analyse.chart.LineChartView
             android:id="@+id/ldc_line_chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp"
+            />
 
         <View
             android:layout_width="match_parent"
@@ -34,8 +36,10 @@
         <lecho.lib.hellocharts.view.ColumnChartView
             android:id="@+id/ldc_column_chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:transitionName="line_depend_column" />
+            android:layout_height="250dp"
+            android:layout_marginTop="@dimen/dp_10"
+            android:transitionName="line_depend_column"
+            />
     </LinearLayout>
 
 

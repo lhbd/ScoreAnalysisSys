@@ -19,11 +19,12 @@ import butterknife.OnClick;
 
 public class StudentScoreDetailFragment extends BaseFragment {
 
-
     @BindView(R.id.s_exam_name_value)
     TextView sExamNameValue;
-    @BindView(R.id.grade_class_value)
-    TextView gradeClassValue;
+    @BindView(R.id.s_name_value)
+    TextView sNameValue;
+    @BindView(R.id.s_num_value)
+    TextView sNumValue;
     @BindView(R.id.s_whole_score_value)
     TextView sWholeScoreValue;
     @BindView(R.id.s_ch_score_value)
@@ -64,7 +65,8 @@ public class StudentScoreDetailFragment extends BaseFragment {
         if (activity == null)
             return;
         activity.getToolbarTitle().setText("成绩一览");
-        activity.showItem(false);
+        activity.resetMenuItem(-1);
+        activity.showBack(true);
     }
 
     private void getExamData() {
@@ -91,13 +93,11 @@ public class StudentScoreDetailFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.s_score_detail_label:
-                ((ClassResultActivity)getContext()).addStudentScoreChartFragment();
+                ((ClassResultActivity)getContext()).addFragment(StudentScoreChartFragment.newInstance(),4);
                 break;
             case R.id.s_g_rank_detail_label:
-                ((ClassResultActivity)getContext()).addStudentScoreChartFragment();
                 break;
             case R.id.s_c_rank_detail_label:
-                ((ClassResultActivity)getContext()).addStudentScoreChartFragment();
                 break;
             case R.id.s_select_exam:
                 getExamData();

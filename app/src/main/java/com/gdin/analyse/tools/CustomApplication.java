@@ -5,12 +5,15 @@ import android.content.Context;
 
 public class CustomApplication extends Application {
     private static Context context;
-    private static int tokenId=3;
-    private static int examId=12;
-    private static String examName = "234";
+    private static int tokenId=1;
+    private static int examId=1;
+    private static String examName = "5月统考";
     private static int schoolId;
     private static int gradeId;
     private static int classId;
+    private static String schoolName;
+    private static String gradeName;
+    private static String className;
 
     @Override
     public void onCreate() {
@@ -45,6 +48,30 @@ public class CustomApplication extends Application {
 
     public static String getExamName() {
         return examName;
+    }
+
+    public static String getSchoolName() {
+        return schoolName;
+    }
+
+    public static String getGradeName() {
+        return gradeName;
+    }
+
+    public static String getClassName() {
+        return className;
+    }
+
+    public static void setSchoolName(String schoolName) {
+        CustomApplication.schoolName = schoolName;
+    }
+
+    public static void setGradeName(String gradeName) {
+        CustomApplication.gradeName = gradeName;
+    }
+
+    public static void setClassName(String className) {
+        CustomApplication.className = className;
     }
 
     public static void setExamName(String examName) {

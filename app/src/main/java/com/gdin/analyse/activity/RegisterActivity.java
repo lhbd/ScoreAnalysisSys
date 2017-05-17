@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -11,7 +12,6 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -38,10 +38,6 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
     Spinner gradeSpinner;
     @BindView(R.id.register_class)
     Spinner classSpinner;
-    @BindView(R.id.register_confirm_btn)
-    Button registerConfirmBtn;
-    @BindView(R.id.register_cancel_btn)
-    Button registerCancelBtn;
     @BindView(R.id.radioGroup)
     RadioGroup radioGroup;
 
@@ -63,37 +59,35 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         this.setFinishOnTouchOutside(false);
     }
 
-    @OnClick({R.id.register_confirm_btn, R.id.register_cancel_btn})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.register_confirm_btn:
-                returnResult();
-                break;
-            case R.id.register_cancel_btn:
-                RegisterActivity.this.setResult(CANCEL, getIntent());
-                RegisterActivity.this.finish();
-                break;
-        }
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         setFocusOnRootLayout();
         return false;
     }
 
+
+    @OnClick(R.id.register_confirm_btn)
+    public void onClick() {
+        returnResult();
+    }
     private void returnResult() {
         String schoolName = registerSchool.getText().toString();
         if (!registerPresent.inputEffective(schoolName)) {
             Toast.makeText(RegisterActivity.this, R.string.register_input_school, Toast.LENGTH_SHORT).show();
             return;
-        } else if (!hasCheckedDegree()) {
+        }else if(gradeSpinner.getSelectedItemPosition() == 0){
+            Toast.makeText(RegisterActivity.this, R.string.register_check_grade, Toast.LENGTH_SHORT).show();
+            return;
+        }else if(classSpinner.getSelectedItemPosition() == 0){
+            Toast.makeText(RegisterActivity.this, R.string.register_check_class, Toast.LENGTH_SHORT).show();
+            return;
+        }else if (!hasCheckedDegree()) {
             Toast.makeText(RegisterActivity.this, R.string.register_check_degree, Toast.LENGTH_SHORT).show();
             return;
         }
-        data.putString("schoolName",schoolName);
+        data.putString("schoolName", schoolName);
 
-        if (data==null)
+        if (data == null)
             return;
         Intent intent = getIntent();
         intent.putExtras(data);
@@ -139,8 +133,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         initSpinnerListener();
         initRadioGroupListener();
     }
+
     //把焦点设置到父view上
-    private void setFocusOnRootLayout(){
+    private void setFocusOnRootLayout() {
         register.setFocusable(true);
         register.setFocusableInTouchMode(true);
         register.requestFocus();
@@ -168,9 +163,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 setFocusOnRootLayout();
                 if (id == R.id.degree_teacher) {
-                    data.putString("loginType","t");
+                    data.putString("loginType", "t");
                 } else {
-                    data.putString("loginType","s");
+                    data.putString("loginType", "s");
                 }
 
             }
@@ -182,7 +177,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         registerSchool.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                data.putInt("loginSchoolId",registerPresent.getSchoolId(position));
+                data.putInt("loginSchoolId", registerPresent.getSchoolId(position));
                 setFocusOnRootLayout();
             }
         });
@@ -190,8 +185,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
         gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                data.putString("gradeName",gradeSpinner.getSelectedItem().toString());
-                data.putInt("loginGradeId",registerPresent.getGradeId(pos));
+                data.putString("gradeName", gradeSpinner.getSelectedItem().toString());
+                data.putInt("loginGradeId", registerPresent.getGradeId(pos));
             }
 
             @Override
@@ -203,8 +198,8 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                data.putString("className",classSpinner.getSelectedItem().toString());
-                data.putInt("loginClassId",registerPresent.getClassId(pos));
+                data.putString("className", classSpinner.getSelectedItem().toString());
+                data.putInt("loginClassId", registerPresent.getClassId(pos));
             }
 
             @Override
@@ -213,4 +208,16 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView 
             }
         });
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            RegisterActivity.this.setResult(CANCEL, getIntent());
+            // 结束SelectCityActivity
+            RegisterActivity.this.finish();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

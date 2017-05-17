@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/dp_10"
-                android:text="年级排名占比"/>
+                android:text="总分排名"/>
             <include
                 layout="@layout/pie_top10_title_layout"/>
             <include

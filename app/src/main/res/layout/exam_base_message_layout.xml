@@ -105,4 +105,23 @@
         android:layout_margin="@dimen/dp_4"
         android:text="3"
         />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/no_exam_number_value"
+        android:background="@android:color/darker_gray"
+        />
+    <TextView
+        android:id="@+id/t_select_exam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/no_exam_number_value"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:text="点击切换试卷"
+        android:textColor="@color/colorAccent"
+        />
+
 </RelativeLayout>

@@ -40,8 +40,10 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
     private LineChartData mLineData;
     private ColumnChartData mColumnData;
 
-    public final static String[] monthStrs = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",};
-    public final static int[] dayStrs = new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+    public final static String[] subjects = new String[]{"sum", "sum", "ch", "ch", "math", "math", "en", "en"};
+    public final static int[] dayStrs = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    public List<Integer> subjectsValues;
+
     public LineDependColumnChartCardView(Context context) {
         super(context);
     }
@@ -56,13 +58,21 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
 
     @Override
     public void initView() {
-        View view = View.inflate(getContext(),R.layout.line_column_cardview_layout,null);
+        View view = View.inflate(getContext(), R.layout.line_column_cardview_layout, null);
         addView(view);
         mLineView = (LineChartView) view.findViewById(R.id.ldc_line_chart);
         mColumnView = (ColumnChartView) view.findViewById(R.id.ldc_column_chart);
-        setInitialLineDatas();
-        setColumnDatas();   //禁用缩放
+//        TextView best = (TextView)view.findViewById(R.id.best_tip);
+//        best.setText(getTipText("--- Best",2));
+//        TextView avg = (TextView)view.findViewById(R.id.avg_tip);
+//        avg.setText(getTipText("--- Avg",3));
     }
+
+//    private SpannableString getTipText(String str,int index) {
+//        SpannableString text = new SpannableString(str);
+//        text.setSpan(new ForegroundColorSpan(ChartUtils.COLORS[index]),0,4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        return text;
+//    }
 
     @Override
     public void initListener() {
@@ -112,8 +122,9 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
      * 设置柱状图数据
      */
     private void setColumnDatas() {
-        int numSubcolumns = 1;                  //一个子列
-        int numColumns = monthStrs.length;      //长度与定义的X轴长度相同
+        if (subjectsValues==null || subjectsValues.size()==0)
+            return;
+        int numColumns = subjects.length;      //长度与定义的X轴长度相同
 
         List<AxisValue> axisValues = new ArrayList<>();
         List<Column> columns = new ArrayList<>();
@@ -122,10 +133,8 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         //设置一些随机值、颜色、标签等
         for (int i = 0; i < numColumns; ++i) {
             values = new ArrayList<>();
-            for (int j = 0; j < numSubcolumns; ++j) {
-                values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
-            }
-            axisValues.add(new AxisValue(i).setLabel(monthStrs[i]));
+            values.add(new SubcolumnValue((float) subjectsValues.get(i), ChartUtils.COLORS[i%2+2]));
+            axisValues.add(new AxisValue(i).setLabel(subjects[i]));
             columns.add(new Column(values).setHasLabelsOnlyForSelected(true));
         }
 
@@ -159,6 +168,12 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         mLineView.startDataAnimation();
     }
 
+    public  void setSubjectsValues(List<Integer> subjectsValues){
+        this.subjectsValues = subjectsValues;
+        setInitialLineDatas();
+        setColumnDatas();   //禁用缩放
+    }
+
 
     /**
      * 节点触摸监听
@@ -189,10 +204,4 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
             setLineDatas(ChartUtils.COLOR_GREEN, 0);
         }
     }
-
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent ev) {
-//        getParent().requestDisallowInterceptTouchEvent(true);
-//        return super.dispatchTouchEvent(ev);
-//    }
 }

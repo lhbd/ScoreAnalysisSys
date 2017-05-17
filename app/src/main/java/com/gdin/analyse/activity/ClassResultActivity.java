@@ -3,15 +3,15 @@ package com.gdin.analyse.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.adapter.QuickFragmentPageAdapter;
+import com.gdin.analyse.fragment.ClassChartDetailFragment;
 import com.gdin.analyse.fragment.ClassChartFragment;
 import com.gdin.analyse.fragment.ClassResultFragment;
-import com.gdin.analyse.fragment.StudentRollFragment;
-import com.gdin.analyse.fragment.StudentScoreChartFragment;
-import com.gdin.analyse.fragment.StudentScoreDetailFragment;
 import com.gdin.analyse.present.ClassResultPresent;
 import com.gdin.analyse.transformer.DepthPageTransformer;
 import com.gdin.analyse.view.ClassResultView;
@@ -21,6 +21,9 @@ import java.util.List;
 
 public class ClassResultActivity extends BaseAppCompatActivity implements ClassResultView {
 
+    private int actionType = 0;
+    private int detailType = -1;
+    private long exitTime = 0;
     List<Fragment> fragments = new ArrayList<>();
     ClassResultPresent present;
     QuickFragmentPageAdapter<Fragment> adapter;
@@ -36,8 +39,33 @@ public class ClassResultActivity extends BaseAppCompatActivity implements ClassR
     }
 
     @Override
-    protected void setDialog() {
-        Toast.makeText(this,"弹出对话框",Toast.LENGTH_SHORT).show();
+    protected void isShowBacking() {
+        showBack(false);
+    }
+
+    @Override
+    protected void onClickBack() {
+        if (pager == null)
+            return;
+        pager.setCurrentItem(pager.getCurrentItem()-1,true);
+    }
+
+    @Override
+    protected void isShowMenuItem() {
+
+    }
+
+    @Override
+    protected void startAction() {
+        if (actionType == 0){
+            actionType = 1;
+            resetChartFragment();
+        }else if(actionType ==1){
+            actionType = 0;
+            resetTextFragment();
+        }else {
+            Toast.makeText(this,"弹出对话框",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -49,8 +77,8 @@ public class ClassResultActivity extends BaseAppCompatActivity implements ClassR
 
     private void init(){
         present = new ClassResultPresent(this);
-        ClassResultFragment resultFragment = ClassResultFragment.newInstance(present.getScoreData());
-        fragments.add(resultFragment);
+        ClassResultFragment textFragment = ClassResultFragment.newInstance();
+        fragments.add(textFragment);
         adapter = new QuickFragmentPageAdapter<>(getSupportFragmentManager(),fragments);
         pager = (ViewPager) findViewById(R.id.class_contain);
         pager.setOffscreenPageLimit(1);
@@ -58,52 +86,94 @@ public class ClassResultActivity extends BaseAppCompatActivity implements ClassR
         pager.setPageTransformer(true,new DepthPageTransformer());
     }
 
-
-    public void addStudentScoreChartFragment(){
-        if (pager.getChildCount() > 4) {
-            pager.setCurrentItem(pager.getCurrentItem()+1,true);
-            return;
-        }
-        StudentScoreChartFragment fragment = StudentScoreChartFragment.newInstance();
+    public void resetChartFragment(){
+        ClassResultFragment resultFragment = (ClassResultFragment)fragments.get(0);
+        fragments.clear();
+        ClassChartDetailFragment fragment = ClassChartDetailFragment.newInstance(resultFragment.getSubjectValues());
         fragments.add(fragment);
+        adapter.updateFlags(0);
         adapter.notifyDataSetChanged();
-        pager.setCurrentItem(fragments.size()-1,true);
+    }
+    public void resetTextFragment(){
+        fragments.clear();
+        ClassResultFragment fragment = ClassResultFragment.newInstance();
+        fragments.add(fragment);
+        adapter.updateFlags(0);
+        adapter.notifyDataSetChanged();
     }
 
-    public void addStudentScoreDetailFragment(){
-        if (pager.getChildCount() > 3) {
+    public void updateFragment(int type){
+        if (type == detailType){
             pager.setCurrentItem(pager.getCurrentItem()+1,true);
             return;
         }
-        StudentScoreDetailFragment fragment = StudentScoreDetailFragment.newInstance();
+        detailType = type;
+        ClassChartFragment fragment = ClassChartFragment.newInstance();
+        Fragment firstFragment = fragments.get(0);
+        fragments.clear();
+        fragments.add(firstFragment);
         fragments.add(fragment);
         adapter.notifyDataSetChanged();
         pager.setCurrentItem(fragments.size()-1,true);
     }
-    public void addStudentRollFragment(){
-        if (pager.getChildCount() > 2) {
+
+    public int getDetailType() {
+        return detailType;
+    }
+
+    public void addFragment(Fragment fragment, int pageCount){
+        if (pager.getChildCount() > pageCount) {
             pager.setCurrentItem(pager.getCurrentItem()+1,true);
             return;
         }
-        StudentRollFragment fragment = StudentRollFragment.newInstance();
         fragments.add(fragment);
         adapter.notifyDataSetChanged();
         pager.setCurrentItem(fragments.size()-1,true);
     }
-    public void addClassChartFragment(){
-        if (pager.getChildCount() > 1) {
-            pager.setCurrentItem(pager.getCurrentItem()+1,true);
+   public void resetMenuItem(int type){
+       MenuItem menuItem = getMenuItem();
+        if (menuItem == null)
             return;
+        switch (type){
+            case 0:
+                this.actionType = 0;
+                menuItem.setIcon(R.mipmap.ic_action_chart);
+                menuItem.setVisible(true);
+                break;
+            case 1:
+                this.actionType = 1;
+                menuItem.setIcon(R.mipmap.ic_action_book);
+                menuItem.setVisible(true);
+                break;
+            case 2:
+                this.actionType = 2;
+                menuItem.setIcon(R.mipmap.ic_action_filter);
+                menuItem.setVisible(true);
+                break;
+            default:
+                menuItem.setVisible(false);
+                break;
         }
-        ClassChartFragment fragment = ClassChartFragment.newInstance(present.getRankData());
-        fragments.add(fragment);
-        adapter.notifyDataSetChanged();
-        pager.setCurrentItem(fragments.size()-1,true);
     }
-    public void showItem(boolean value){
-        if (getItem() == null)
-            return;
-       getItem().setVisible(value);
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                    Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
+        }
     }
 
 }

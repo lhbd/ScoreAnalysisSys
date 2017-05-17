@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface ClassResultModel {
 
-    ArrayList<ClassResultScoreEntity> getScoreData();
    List<ExamDataEntity> getExamData();
     ArrayList<Integer> getRankData();
 }

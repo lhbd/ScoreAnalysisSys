@@ -16,7 +16,7 @@
     <string name="degree_class">班级</string>
     <string name="degree_power">身份</string>
     
-    <string name="confirm">确定</string>
+    <string name="confirm">ok</string>
     <string name="cancel">取消</string>
 
     <string name="reset_pwd">修改密码</string>
@@ -41,6 +41,8 @@
     <string name="register_degree_student">学生</string>
 
     <string name="register_input_school">请输入有效的学校名</string>
+    <string name="register_check_grade">请选择你的班级</string>
+    <string name="register_check_class">请选择你的年级</string>
     <string name="register_check_degree">请选择你的身份</string>
 
     <string name="show_all_score">成绩一览</string>

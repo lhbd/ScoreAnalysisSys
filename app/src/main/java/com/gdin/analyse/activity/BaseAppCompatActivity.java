@@ -53,27 +53,30 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        if (getToolbar() == null)
+            return;
+        isShowBacking();
         /**
          * 判断是否有Toolbar,并默认显示返回按钮
          */
-        if(null != getToolbar() &&  isShowBacking()){
-            showBack();
-        }
+//        if(null != getToolbar() &&  isShowBacking()){
+//            showBack();
+//        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
-        menuItem = menu.findItem(R.id.select_btn);
-        menuItem.setVisible(false);
+        menuItem = menu.findItem(R.id.action_btn);
+        isShowMenuItem();
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.select_btn:
-                setDialog();
+            case R.id.action_btn:
+                startAction();
                 break;
             case R.id.user_message:
                 startActivity(UserMessageActivity.class);
@@ -138,22 +141,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
         return mToolbarTitle;
     }
 
-    protected MenuItem getItem(){
+    protected MenuItem getMenuItem(){
         return menuItem;
-    }
-
-
-    /**
-     * 设置头部标题
-     * @param title
-     */
-    public void setToolBarTitle(CharSequence title) {
-        if(mToolbarTitle != null){
-            mToolbarTitle.setText(title);
-        }else{
-            getToolbar().setTitle(title);
-            setSupportActionBar(getToolbar());
-        }
     }
 
     /**
@@ -168,23 +157,19 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
     /**
      * 版本号小于21的后退按钮图片
      */
-    private void showBack(){
-        //setNavigationIcon必须在setSupportActionBar(toolbar);方法后面加入
-        getToolbar().setNavigationIcon(R.mipmap.icon_back);
-        getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
+    public void showBack(boolean isShow){
+        if (!isShow){
+            getToolbar().setNavigationIcon(null);
+        }else{
+            getToolbar().setNavigationIcon(R.mipmap.icon_back);
+            getToolbar().setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickBack();
+                }
+            });
+        }
 
-    /**
-     * 是否显示后退按钮,默认显示,可在子类重写该方法.
-     * @return
-     */
-    protected boolean isShowBacking(){
-        return true;
     }
 
     /**
@@ -199,8 +184,13 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
      */
     protected abstract void bindView();
 
-    protected abstract void setDialog();
-//
+    protected abstract void startAction();
+
+    protected abstract void isShowBacking();
+
+    protected abstract void onClickBack();
+
+    protected abstract void isShowMenuItem();
 
 
     @Override

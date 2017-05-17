@@ -48,12 +48,14 @@ public class UserMessageActivity extends BaseAppCompatActivity implements UserMe
         init();
     }
 
+
     private void init() {
         UserMessagePresent present = new UserMessagePresent(this);
         UserMessageAdapter adapter = new UserMessageAdapter(R.layout.user_message_item_layout, present.init());
         adapter.openLoadAnimation();
         messageView.setLayoutManager(new LinearLayoutManager(this));
         messageView.setAdapter(adapter);
+
     }
 
     @Override
@@ -67,8 +69,26 @@ public class UserMessageActivity extends BaseAppCompatActivity implements UserMe
     }
 
     @Override
-    protected void setDialog() {
+    protected void startAction() {
 
+    }
+
+    @Override
+    protected void isShowBacking() {
+        showBack(true);
+    }
+
+    @Override
+    protected void onClickBack() {
+        finish();
+    }
+
+    @Override
+    protected void isShowMenuItem() {
+        if (getMenuItem()==null) {
+            return;
+        }
+        getMenuItem().setVisible(false);
     }
 
     @OnClick(R.id.text_card)

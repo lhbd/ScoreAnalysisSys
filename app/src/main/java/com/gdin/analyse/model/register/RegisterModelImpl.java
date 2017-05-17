@@ -20,11 +20,13 @@ public class RegisterModelImpl implements RegisterModel {
 
     @Override
     public void initData() {
-        gradeEntityList.add(new GradeEntity(1,"初一"));
-        gradeEntityList.add(new GradeEntity(2,"初二"));
-        gradeEntityList.add(new GradeEntity(3,"初三"));
+        gradeEntityList.add(new GradeEntity(0,"——班级——"));
+        gradeEntityList.add(new GradeEntity(1,"一年级"));
+        gradeEntityList.add(new GradeEntity(2,"二年级"));
+        gradeEntityList.add(new GradeEntity(3,"三年级"));
 
-        for (int i = 1;i<9;i++){
+        classEntityList.add(new ClassEntity(0,"——年级——"));
+        for (int i = 1;i<4;i++){
             classEntityList.add(new ClassEntity(i,i+"班"));
         }
     }

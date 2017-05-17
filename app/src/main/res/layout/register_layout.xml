@@ -3,6 +3,7 @@
     android:id="@+id/register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_div_color"
     >
 
     <com.gdin.analyse.tools.CustomAutoCompleteTextView
@@ -40,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/register_grade"
         android:orientation="horizontal"
-        android:layout_margin="10dp">
+        android:layout_margin="10dp"
+        >
         <RadioButton android:id="@+id/degree_teacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,25 +52,21 @@
             android:layout_height="wrap_content"
             android:text="@string/register_degree_student" />
     </RadioGroup>
-
-    <Button
-        android:id="@+id/register_cancel_btn"
-        android:layout_below="@id/radioGroup"
-        android:layout_alignParentStart="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_loginbtn"
-        android:text="@string/cancel"
+    <View
+        android:id="@+id/register_line"
+        android:layout_below="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/white"
         />
-    <Button
+    <TextView
         android:id="@+id/register_confirm_btn"
-        android:layout_below="@id/radioGroup"
-        android:layout_alignParentEnd="true"
-        android:layout_width="wrap_content"
+        android:layout_below="@id/register_line"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/bg_loginbtn"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
         android:text="@string/confirm"
+        android:textColor="@android:color/white"
         />
 </RelativeLayout>

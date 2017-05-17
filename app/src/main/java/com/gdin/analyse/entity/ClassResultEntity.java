@@ -7,31 +7,89 @@ import android.support.annotation.Nullable;
 
 public class ClassResultEntity implements Parcelable{
 
-    private int id;
-    private int schoolId;
-    private int gradeId;
-    private int classId;
-    private int examId;
+    private double id;
+    private double schoolId;
+    private double gradeId;
+    private double classId;
+    private double examId;
     @Nullable
     private String examName;
-    private int chBest;
-    private int mathBest;
-    private int enBest;
-    private int sumBest;
-    private int chAvg;
-    private int mathAvg;
-    private int enAvg;
-    private int sumAvg;
-    private int number;
-    private int passNumber;
-    private int superiorNumber;
+    private double chBest;
+    private double mathBest;
+    private double enBest;
+    private double sumBest;
+    private double chAvg;
+    private double mathAvg;
+    private double enAvg;
+    private double sumAvg;
+    private double number;
+    private double passNumber;
+    private double superiorNumber;
 
-    public ClassResultEntity(int schoolId, int gradeId, int classId, String examName) {
+    public ClassResultEntity(double schoolId, double gradeId, double classId, String examName) {
         this.schoolId = schoolId;
         this.gradeId = gradeId;
         this.classId = classId;
         this.examName = examName;
     }
+
+    protected ClassResultEntity(Parcel in) {
+        id = in.readDouble();
+        schoolId = in.readDouble();
+        gradeId = in.readDouble();
+        classId = in.readDouble();
+        examId = in.readDouble();
+        examName = in.readString();
+        chBest = in.readDouble();
+        mathBest = in.readDouble();
+        enBest = in.readDouble();
+        sumBest = in.readDouble();
+        chAvg = in.readDouble();
+        mathAvg = in.readDouble();
+        enAvg = in.readDouble();
+        sumAvg = in.readDouble();
+        number = in.readDouble();
+        passNumber = in.readDouble();
+        superiorNumber = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(id);
+        dest.writeDouble(schoolId);
+        dest.writeDouble(gradeId);
+        dest.writeDouble(classId);
+        dest.writeDouble(examId);
+        dest.writeString(examName);
+        dest.writeDouble(chBest);
+        dest.writeDouble(mathBest);
+        dest.writeDouble(enBest);
+        dest.writeDouble(sumBest);
+        dest.writeDouble(chAvg);
+        dest.writeDouble(mathAvg);
+        dest.writeDouble(enAvg);
+        dest.writeDouble(sumAvg);
+        dest.writeDouble(number);
+        dest.writeDouble(passNumber);
+        dest.writeDouble(superiorNumber);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ClassResultEntity> CREATOR = new Creator<ClassResultEntity>() {
+        @Override
+        public ClassResultEntity createFromParcel(Parcel in) {
+            return new ClassResultEntity(in);
+        }
+
+        @Override
+        public ClassResultEntity[] newArray(int size) {
+            return new ClassResultEntity[size];
+        }
+    };
 
     @Override
     public String toString() {
@@ -56,23 +114,23 @@ public class ClassResultEntity implements Parcelable{
                 '}';
     }
 
-    public int getId() {
+    public double getId() {
         return id;
     }
 
-    public int getSchoolId() {
+    public double getSchoolId() {
         return schoolId;
     }
 
-    public int getGradeId() {
+    public double getGradeId() {
         return gradeId;
     }
 
-    public int getClassId() {
+    public double getClassId() {
         return classId;
     }
 
-    public int getExamId() {
+    public double getExamId() {
         return examId;
     }
 
@@ -80,47 +138,47 @@ public class ClassResultEntity implements Parcelable{
         return examName;
     }
 
-    public int getChBest() {
+    public double getChBest() {
         return chBest;
     }
 
-    public int getMathBest() {
+    public double getMathBest() {
         return mathBest;
     }
 
-    public int getEnBest() {
+    public double getEnBest() {
         return enBest;
     }
 
-    public int getSumBest() {
+    public double getSumBest() {
         return sumBest;
     }
 
-    public int getChAvg() {
+    public double getChAvg() {
         return chAvg;
     }
 
-    public int getMathAvg() {
+    public double getMathAvg() {
         return mathAvg;
     }
 
-    public int getEnAvg() {
+    public double getEnAvg() {
         return enAvg;
     }
 
-    public int getSumAvg() {
+    public double getSumAvg() {
         return sumAvg;
     }
 
-    public int getNumber() {
+    public double getNumber() {
         return number;
     }
 
-    public int getPassNumber() {
+    public double getPassNumber() {
         return passNumber;
     }
 
-    public int getSuperiorNumber() {
+    public double getSuperiorNumber() {
         return superiorNumber;
     }
 
@@ -128,19 +186,19 @@ public class ClassResultEntity implements Parcelable{
         this.id = id;
     }
 
-    public void setSchoolId(int schoolId) {
+    public void setSchoolId(double schoolId) {
         this.schoolId = schoolId;
     }
 
-    public void setGradeId(int gradeId) {
+    public void setGradeId(double gradeId) {
         this.gradeId = gradeId;
     }
 
-    public void setClassId(int classId) {
+    public void setClassId(double classId) {
         this.classId = classId;
     }
 
-    public void setExamId(int examId) {
+    public void setExamId(double examId) {
         this.examId = examId;
     }
 
@@ -148,105 +206,48 @@ public class ClassResultEntity implements Parcelable{
         this.examName = examName;
     }
 
-    public void setChBest(int chBest) {
+    public void setChBest(double chBest) {
         this.chBest = chBest;
     }
 
-    public void setMathBest(int mathBest) {
+    public void setMathBest(double mathBest) {
         this.mathBest = mathBest;
     }
 
-    public void setEnBest(int enBest) {
+    public void setEnBest(double enBest) {
         this.enBest = enBest;
     }
 
-    public void setSumBest(int sumBest) {
+    public void setSumBest(double sumBest) {
         this.sumBest = sumBest;
     }
 
-    public void setChAvg(int chAvg) {
+    public void setChAvg(double chAvg) {
         this.chAvg = chAvg;
     }
 
-    public void setMathAvg(int mathAvg) {
+    public void setMathAvg(double mathAvg) {
         this.mathAvg = mathAvg;
     }
 
-    public void setEnAvg(int enAvg) {
+    public void setEnAvg(double enAvg) {
         this.enAvg = enAvg;
     }
 
-    public void setSumAvg(int sumAvg) {
+    public void setSumAvg(double sumAvg) {
         this.sumAvg = sumAvg;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(double number) {
         this.number = number;
     }
 
-    public void setPassNumber(int passNumber) {
+    public void setPassNumber(double passNumber) {
         this.passNumber = passNumber;
     }
 
-    public void setSuperiorNumber(int superiorNumber) {
+    public void setSuperiorNumber(double superiorNumber) {
         this.superiorNumber = superiorNumber;
     }
 
-    protected ClassResultEntity(Parcel in) {
-        id = in.readInt();
-        schoolId = in.readInt();
-        gradeId = in.readInt();
-        classId = in.readInt();
-        examId = in.readInt();
-        examName = in.readString();
-        chBest = in.readInt();
-        mathBest = in.readInt();
-        enBest = in.readInt();
-        sumBest = in.readInt();
-        chAvg = in.readInt();
-        mathAvg = in.readInt();
-        enAvg = in.readInt();
-        sumAvg = in.readInt();
-        number = in.readInt();
-        passNumber = in.readInt();
-        superiorNumber = in.readInt();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeInt(schoolId);
-        dest.writeInt(gradeId);
-        dest.writeInt(classId);
-        dest.writeInt(examId);
-        dest.writeString(examName);
-        dest.writeInt(chBest);
-        dest.writeInt(mathBest);
-        dest.writeInt(enBest);
-        dest.writeInt(sumBest);
-        dest.writeInt(chAvg);
-        dest.writeInt(mathAvg);
-        dest.writeInt(enAvg);
-        dest.writeInt(sumAvg);
-        dest.writeInt(number);
-        dest.writeInt(passNumber);
-        dest.writeInt(superiorNumber);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<ClassResultEntity> CREATOR = new Creator<ClassResultEntity>() {
-        @Override
-        public ClassResultEntity createFromParcel(Parcel in) {
-            return new ClassResultEntity(in);
-        }
-
-        @Override
-        public ClassResultEntity[] newArray(int size) {
-            return new ClassResultEntity[size];
-        }
-    };
 }

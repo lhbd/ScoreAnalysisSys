@@ -26,7 +26,7 @@ public class StudentScoreChartFragment extends BaseFragment {
     @Override
     public void initData(View view) {
         lineChartCardView = (LineChartCardView)view.findViewById(R.id.line_card);
-        lineChartCardView.setData();
+        lineChartCardView.setData(0);
         lineChartCardView.postInvalidate();
     }
 
@@ -36,7 +36,8 @@ public class StudentScoreChartFragment extends BaseFragment {
         if (activity == null)
             return;
         activity.getToolbarTitle().setText("成绩分析图");
-        activity.showItem(false);
+        activity.resetMenuItem(-1);
+        activity.showBack(true);
     }
 
     private void getExamData() {

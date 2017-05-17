@@ -8,15 +8,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="@dimen/dp_4">
-        <com.gdin.analyse.chart.PieChartCardView
-            android:id="@+id/pie_card"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <com.gdin.analyse.chart.LineChartCardView
-            android:id="@+id/line_card"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+       <com.gdin.analyse.chart.LineDependColumnChartCardView
+           android:id="@+id/lcc_card"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+       </com.gdin.analyse.chart.LineDependColumnChartCardView>
     </LinearLayout>
 
 </ScrollView>

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
+import com.gdin.analyse.fragment.StudentRollFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,13 @@ import lecho.lib.hellocharts.view.PieChartView;
 
 public  class PieChartCardView extends BaseFrameLayout {
 
+    private final static int SUM_SCORE = 0;
+    private final static int CH_SCORE = 1;
+    private final static int MATH_SCORE = 2;
+    private final static int EN_SCORE = 3;
     PieChartView pieView;
-    //    PieChartView pieView;
+    TextView pieLabel;
     private PieChartData mPieChartData;                 //饼状图数据
-
-
 
     public PieChartCardView(Context context) {
         super(context);
@@ -43,7 +46,7 @@ public  class PieChartCardView extends BaseFrameLayout {
         addView(view);
         initText(view);
         pieView = (PieChartView) view.findViewById(R.id.pie);
-
+        pieLabel = (TextView)view.findViewById(R.id.pie_label);
     }
 
     @Override
@@ -60,9 +63,23 @@ public  class PieChartCardView extends BaseFrameLayout {
         otherPoint.setTextColor(ChartUtils.COLORS[4]);
     }
 
-    public void setData(List<Integer> data) {
+    public void setData(List<Integer> data,int type) {
         if (data == null || data.size() < 1)
             return;
+        switch (type){
+            case SUM_SCORE:
+                pieLabel.setText("总分排名");
+                break;
+            case CH_SCORE:
+                pieLabel.setText("语文排名");
+                break;
+            case MATH_SCORE:
+                pieLabel.setText("数学排名");
+                break;
+            case EN_SCORE:
+                pieLabel.setText("英语排名");
+                break;
+        }
         /*===== 随机设置每块的颜色和数据 =====*/
         List<SliceValue> values = new ArrayList<>();
         for (int i = 0; i < 3; ++i) {
@@ -77,6 +94,15 @@ public  class PieChartCardView extends BaseFrameLayout {
         mPieChartData.setHasLabelsOutside(false);   //外部有标签
         mPieChartData.setHasCenterCircle(false);    //空心圆环
         pieView.setPieChartData(mPieChartData);         //设置控件
+        changePiesAnimate();
+    }
+
+
+    private void changePiesAnimate() {
+        for (SliceValue value : mPieChartData.getValues()) {
+            value.setTarget((float) Math.random() * 30 + 15);
+        }
+        pieView.startDataAnimation();
     }
 
     /**
@@ -87,7 +113,7 @@ public  class PieChartCardView extends BaseFrameLayout {
         @Override
         public void onValueSelected(int arcIndex, SliceValue value) {
             requestDisallowInterceptTouchEvent(false);
-            ((ClassResultActivity)getContext()).addStudentRollFragment();
+            ((ClassResultActivity)getContext()).addFragment(StudentRollFragment.newInstance(),2);
         }
 
         @Override
