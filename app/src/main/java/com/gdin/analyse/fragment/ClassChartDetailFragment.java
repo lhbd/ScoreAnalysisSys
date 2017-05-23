@@ -7,13 +7,10 @@ import android.view.View;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
-import com.gdin.analyse.chart.LineDependColumnChartCardView;
-
-import java.util.ArrayList;
+import com.gdin.analyse.chart.LineDependColumnCardView;
 
 public class ClassChartDetailFragment extends BaseFragment{
 
-    LineDependColumnChartCardView lcc;
     private int type;
     SharedPreferences sp;
 
@@ -39,16 +36,18 @@ public class ClassChartDetailFragment extends BaseFragment{
 
     @Override
     public void initData(View view) {
-        sp = ((ClassResultActivity)getActivity()).getSp();
-        lcc = (LineDependColumnChartCardView)view.findViewById(R.id.lcc_card);
-        lcc.setSubjectsValues(getArguments().getIntegerArrayList("subjectValues"));
+        if (sp == null){
+            sp = ((ClassResultActivity)getActivity()).getSp();
+        }
+        LineDependColumnCardView lcc = (LineDependColumnCardView)view.findViewById(R.id.lcc_card);
+        lcc.setSubjectsValues(getArguments().getFloatArray("subjectValues"));
         lcc.postInvalidate();
     }
 
-    public static ClassChartDetailFragment newInstance(ArrayList<Integer> subjectValues) {
+    public static ClassChartDetailFragment newInstance(float[] subjectValues) {
 
         Bundle bundle = new Bundle();
-        bundle.putIntegerArrayList("subjectValues",subjectValues);
+        bundle.putFloatArray("subjectValues",subjectValues);
         ClassChartDetailFragment fragment = new ClassChartDetailFragment();
         fragment.setArguments(bundle);
         return fragment;

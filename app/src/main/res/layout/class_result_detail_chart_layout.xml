@@ -8,12 +8,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="@dimen/dp_4">
-       <com.gdin.analyse.chart.LineDependColumnChartCardView
+       <com.gdin.analyse.chart.LineDependColumnCardView
            android:id="@+id/lcc_card"
            android:layout_width="match_parent"
            android:layout_height="wrap_content">
 
-       </com.gdin.analyse.chart.LineDependColumnChartCardView>
+       </com.gdin.analyse.chart.LineDependColumnCardView>
     </LinearLayout>
 
 </ScrollView>

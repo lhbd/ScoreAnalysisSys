@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
-import com.gdin.analyse.fragment.StudentRollFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,18 +65,25 @@ public  class PieChartCardView extends BaseFrameLayout {
     public void setData(List<Integer> data,int type) {
         if (data == null || data.size() < 1)
             return;
+        ClassResultActivity activity = (ClassResultActivity)getContext();
+        if (activity == null)
+            return;
         switch (type){
             case SUM_SCORE:
                 pieLabel.setText("总分排名");
+                activity.getToolbarTitle().setText("班级总分成绩分析图");
                 break;
             case CH_SCORE:
                 pieLabel.setText("语文排名");
+                activity.getToolbarTitle().setText("班级语文成绩分析图");
                 break;
             case MATH_SCORE:
                 pieLabel.setText("数学排名");
+                activity.getToolbarTitle().setText("班级数学成绩分析图");
                 break;
             case EN_SCORE:
                 pieLabel.setText("英语排名");
+                activity.getToolbarTitle().setText("班级英语成绩分析图");
                 break;
         }
         /*===== 随机设置每块的颜色和数据 =====*/
@@ -113,7 +119,8 @@ public  class PieChartCardView extends BaseFrameLayout {
         @Override
         public void onValueSelected(int arcIndex, SliceValue value) {
             requestDisallowInterceptTouchEvent(false);
-            ((ClassResultActivity)getContext()).addFragment(StudentRollFragment.newInstance(),2);
+            //orderBy 按什么排序 可选：ch_rank  math_rank en_rank sum_rank（总分） stu_num(学号)
+            ((ClassResultActivity)getContext()).updateRollFragment((int)value.getValue(),"sum_rank","asc");
         }
 
         @Override

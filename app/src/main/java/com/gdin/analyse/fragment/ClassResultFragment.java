@@ -21,7 +21,6 @@ import com.gdin.analyse.listener.OnRecyclerItemClickListener;
 import com.gdin.analyse.subscribers.cSubscriber;
 import com.gdin.analyse.tools.CustomApplication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,9 +72,10 @@ public class ClassResultFragment extends BaseFragment {
     TextView classEnAvgValue;
 
     SharedPreferences sp;
+    private View lastView;
+    private String examSelected;
 
-    ArrayList<Integer>  subjectValues = new ArrayList<>();
-
+    float[] subjectValues;
 
     @Override
     public View initView() {
@@ -84,7 +84,9 @@ public class ClassResultFragment extends BaseFragment {
 
     @Override
     public void initData(View view) {
-        sp = ((ClassResultActivity)getActivity()).getSp();
+        if (sp == null){
+            sp = ((ClassResultActivity)getActivity()).getSp();
+        }
         schoolValue.setText(sp.getString("schoolName",""));
         gradeClassValue.setText(new StringBuffer().append(sp.getString("gradeName",""))
                 .append(sp.getString("className","")));
@@ -115,14 +117,25 @@ public class ClassResultFragment extends BaseFragment {
         builder.setView(dialogView);
 
         final AlertDialog dialog = builder.show();     //AlertDialog.Builder 的父类AlertDialog才有dismiss方法可以关闭对话框
-
+        TextView ok = (TextView)dialogView.findViewById(R.id.ok);
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), examSelected,
+                        Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
         recyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(recyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder) {
-                Toast.makeText(getContext(),
-                        ((TextView) (((BaseViewHolder) holder).getView(R.id.exam_dialog_item))).getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+                if (lastView != null){
+                    lastView.setVisibility(View.INVISIBLE);
+                }
+                BaseViewHolder viewHolder = ((BaseViewHolder)holder);
+                viewHolder.getView(R.id.tick).setVisibility(View.VISIBLE);
+                lastView =  viewHolder.getView(R.id.tick);
+                examSelected = ((TextView)viewHolder.getView(R.id.exam_dialog_item)).getText().toString();
             }
         });
     }
@@ -166,14 +179,11 @@ public class ClassResultFragment extends BaseFragment {
         classMathAvgValue.setText(String.valueOf(entity.getMathAvg()));
         classEnMaxValue.setText(String.valueOf(entity.getEnBest()));
         classEnAvgValue.setText(String.valueOf(entity.getEnAvg()));
-        subjectValues.add((int)entity.getSumBest());
-        subjectValues.add((int)entity.getSumAvg());
-        subjectValues.add((int)entity.getChBest());
-        subjectValues.add((int)entity.getChAvg());
-        subjectValues.add((int)entity.getMathBest());
-        subjectValues.add((int)entity.getMathAvg());
-        subjectValues.add((int)entity.getEnBest());
-        subjectValues.add((int)entity.getEnAvg());
+        subjectValues = new float[4];
+        subjectValues[0] = (float)entity.getSumBest();
+        subjectValues[1] = (float)entity.getChBest();
+        subjectValues[2] = (float)entity.getMathBest();
+        subjectValues[3] = (float)entity.getEnBest();
     }
     private void setGradeResult(ClassResultEntity entity ){
         gradeScoreMaxValue.setText(String.valueOf(entity.getSumBest()));
@@ -206,7 +216,7 @@ public class ClassResultFragment extends BaseFragment {
         return fragment;
     }
 
-    public ArrayList<Integer> getSubjectValues() {
+    public float[] getSubjectValues() {
         return subjectValues;
     }
 
@@ -226,8 +236,6 @@ public class ClassResultFragment extends BaseFragment {
                 ((ClassResultActivity)getContext()).updateFragment(3);
                 break;
             case R.id.t_select_exam:
-//                ((ClassResultActivity)getContext()).resetFragment();
-
                 getExamData();
                 break;
             default:

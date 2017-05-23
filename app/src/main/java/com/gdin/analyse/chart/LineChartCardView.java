@@ -11,9 +11,6 @@ import com.gdin.analyse.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import lecho.lib.hellocharts.animation.ChartAnimationListener;
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
@@ -24,18 +21,12 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
-
 /**
  * @author lecho
  * @revision xiarui 2016.09.07
  * @description 线性图 Line Chart 的使用 （折线图、曲线图）
  */
 public class LineChartCardView extends BaseFrameLayout {
-
-    private final static int SUM_SCORE = 0;
-    private final static int CH_SCORE = 1;
-    private final static int MATH_SCORE = 2;
-    private final static int EN_SCORE = 3;
 
     /*=========== 控件相关 ==========*/
     private LineChartView mLineChartView;               //线性图表控件
@@ -59,7 +50,7 @@ public class LineChartCardView extends BaseFrameLayout {
 
     /*=========== 其他相关 ==========*/
     private ValueShape pointsShape = ValueShape.CIRCLE; //点的形状(圆/方/菱形)
-    float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints]; //将线上的点放在一个数组中
+    float[] pointValues; //将线上的点放在一个数组中
 
     public LineChartCardView(Context context) {
         super(context);
@@ -87,22 +78,9 @@ public class LineChartCardView extends BaseFrameLayout {
         mLineChartView.setViewportCalculationEnabled(false);
     }
 
-    public void setData(int type) {
-        switch (type){
-            case SUM_SCORE:
-                lineLabel.setText("总分得分详情");
-                break;
-            case CH_SCORE:
-                lineLabel.setText("语文得分详情");
-                break;
-            case MATH_SCORE:
-                lineLabel.setText("数学得分详情");
-                break;
-            case EN_SCORE:
-                lineLabel.setText("英语得分详情");
-                break;
-        }
-        setPointsValues();          //设置每条线的节点值
+    public void setData(float[] pointValues) {
+        this.pointValues = pointValues;
+//        setPointsValues();          //设置每条线的节点值
         setLinesDatas();            //设置每条线的一些属性
         resetViewport();            //计算并绘图
     }
@@ -113,29 +91,19 @@ public class LineChartCardView extends BaseFrameLayout {
         mLineChartView.setOnValueTouchListener(new ValueTouchListener());
     }
 
-
-    /**
-     * 利用随机数设置每条线对应节点的值
-     */
-    private void setPointsValues() {
-        for (int i = 0; i < maxNumberOfLines; ++i) {
-            for (int j = 0; j < numberOfPoints; ++j) {
-                randomNumbersTab[i][j] = (float) Math.random() * 100f;
-            }
-        }
-    }
-
     /**
      * 设置线的相关数据
      */
     private void setLinesDatas() {
+        if (pointValues == null || pointValues.length == 0)
+            return;
         List<Line> lines = new ArrayList<>();
         //循环将每条线都设置成对应的属性
         for (int i = 0; i < numberOfLines; ++i) {
             //节点的值
             List<PointValue> values = new ArrayList<>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j, randomNumbersTab[i][j]));
+            for (int j = 0; j <  pointValues.length; ++j) {
+                values.add(new PointValue(j, pointValues[j]));
             }
 
             /*========== 设置线的一些属性 ==========*/
@@ -217,6 +185,9 @@ public class LineChartCardView extends BaseFrameLayout {
         mLineChartView.startDataAnimation(); //开始动画
     }
 
+    public TextView getLineLabel() {
+        return lineLabel;
+    }
 
     /**
      * 节点触摸监听
@@ -224,7 +195,7 @@ public class LineChartCardView extends BaseFrameLayout {
     private class ValueTouchListener implements LineChartOnValueSelectListener {
         @Override
         public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-            Toast.makeText(getContext(), "选中第 " + ((int) value.getX() + 1) + " 个节点", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "选中第 " + (value.getX() + 1) + " 个节点", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -253,91 +224,5 @@ public class LineChartCardView extends BaseFrameLayout {
             mLineChartView.setMaximumViewport(v);                   //设置最大视图
             mLineChartView.setViewportAnimationListener(null);      //取消监听
         }
-    }
-
-    private Timer timer = new Timer();
-    private boolean isFinish = false;
-    private int position = 0;
-    private List<PointValue> pointValueList = new ArrayList<>();
-    private Random random = new Random();
-    private List<Line> linesList = new ArrayList<>();
-    private LineChartData lineChartData;
-
-
-    /**
-     * 视差使数据看起来为动态加载（心电图效果）
-     */
-    private void dynamicDataDisplay() {
-        mLineChartView.setInteractive(false);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!isFinish) {
-                    //实时添加新的点
-                    PointValue value1 = new PointValue(position * 5, 40 + random.nextInt(20));
-                    value1.setLabel("00:00");
-                    pointValueList.add(value1);
-                    float x = value1.getX();
-                    //根据新的点的集合画出新的线
-                    Line line = new Line(pointValueList);
-                    line.setColor(Color.RED);
-                    line.setShape(ValueShape.CIRCLE);
-                    line.setCubic(true);//曲线是否平滑，即是曲线还是折线
-
-                    linesList.clear();
-                    linesList.add(line);
-                    lineChartData = initDatas(linesList);
-                    mLineChartView.setLineChartData(lineChartData);
-                    //根据点的横坐标实时变幻坐标的视图范围
-                    Viewport port;
-                    if (x > 50) {
-                        port = initViewPort(x - 50, x);
-                    } else {
-                        port = initViewPort(0, 50);
-                    }
-                    mLineChartView.setCurrentViewport(port);//当前窗口
-
-                    Viewport maPort = initMaxViewPort(x);
-                    mLineChartView.setMaximumViewport(maPort);//最大窗口
-
-                    position++;
-                    if (position > 100 - 1) {
-                        isFinish = true;
-                        mLineChartView.setInteractive(true);
-                    }
-                }
-            }
-        }, 300, 300);
-    }
-
-    private LineChartData initDatas(List<Line> lines) {
-        LineChartData data = new LineChartData(lines);
-        Axis axisX = new Axis();
-        Axis axisY = new Axis().setHasLines(true);
-        axisX.setTextColor(Color.GRAY);
-        axisY.setTextColor(Color.GRAY);
-        axisX.setName("Axis X");
-        axisY.setName("Axis Y");
-        data.setAxisXBottom(axisX);
-        data.setAxisYLeft(axisY);
-        return data;
-    }
-
-    private Viewport initViewPort(float left, float right) {
-        Viewport port = new Viewport();
-        port.top = 100;
-        port.bottom = 0;
-        port.left = left;
-        port.right = right;
-        return port;
-    }
-
-    private Viewport initMaxViewPort(float right) {
-        Viewport port = new Viewport();
-        port.top = 100;
-        port.bottom = 0;
-        port.left = 0;
-        port.right = right + 50;
-        return port;
     }
 }

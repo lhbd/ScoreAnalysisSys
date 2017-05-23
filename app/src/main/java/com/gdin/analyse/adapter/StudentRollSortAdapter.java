@@ -6,11 +6,11 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.gdin.analyse.R;
-import com.gdin.analyse.entity.StudentScoreResultEntity;
+import com.gdin.analyse.entity.StudentRollSortResultEntity;
 
 import java.util.List;
 
-public  class StudentRollAdapter extends BaseQuickAdapter<StudentScoreResultEntity,BaseViewHolder> {
+public  class StudentRollSortAdapter extends BaseQuickAdapter<StudentRollSortResultEntity,BaseViewHolder> {
 
     public onClickForDetailListener listener;
     public void setonClickForDetailListener(onClickForDetailListener listener){
@@ -20,20 +20,20 @@ public  class StudentRollAdapter extends BaseQuickAdapter<StudentScoreResultEnti
         void onClickForDetail(int pos);
     }
 
-    public StudentRollAdapter(int layoutResId, List<StudentScoreResultEntity> data) {
+    public StudentRollSortAdapter(int layoutResId, List<StudentRollSortResultEntity> data) {
         super(layoutResId, data);
     }
 
-    public StudentRollAdapter(List<StudentScoreResultEntity> data) {
+    public StudentRollSortAdapter(List<StudentRollSortResultEntity> data) {
         super(data);
     }
 
-    public StudentRollAdapter(int layoutResId) {
+    public StudentRollSortAdapter(int layoutResId) {
         super(layoutResId);
     }
 
     @Override
-    protected void convert(BaseViewHolder holder, StudentScoreResultEntity item) {
+    protected void convert(BaseViewHolder holder, StudentRollSortResultEntity item) {
 
         holder.setText(R.id.s_name,item.getStuName());
         holder.setText(R.id.s_id,item.getStuNum()+"");
@@ -41,8 +41,8 @@ public  class StudentRollAdapter extends BaseQuickAdapter<StudentScoreResultEnti
         holder.setText(R.id.s_ch_value,item.getChScore()+"");
         holder.setText(R.id.s_math_value,item.getMathScore()+"");
         holder.setText(R.id.s_en_value,item.getEnScore()+"");
-        holder.setText(R.id.s_grade_rank_value,0+"");
-        holder.setText(R.id.s_class_rank_value,0+"");
+        holder.setText(R.id.s_grade_rank_value,item.getSumRank()+"");
+        holder.setText(R.id.s_class_rank_value,item.getSumRank()+"");
 
         final int pos = holder.getAdapterPosition();
         holder.getView(R.id.show_detail_label).setOnClickListener(new View.OnClickListener() {

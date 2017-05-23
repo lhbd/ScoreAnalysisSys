@@ -10,9 +10,6 @@
     <item android:id="@+id/user_message"
         android:title="@string/user_message"
         />
-    <item android:id="@+id/help"
-        android:title="@string/help"
-        />
     <item android:id="@+id/log_off"
           android:title="@string/log_off"
         />

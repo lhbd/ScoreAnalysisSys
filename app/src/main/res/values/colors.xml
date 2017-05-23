@@ -8,6 +8,13 @@
     <color name="simiple_button_color">#FFF</color>
     <color name="link_color">#FF0066CC</color>
     <color name="text_black_color">#000000</color>
+    <color name="text_gray_color">#999898</color>
+    <color name="text_white_color">#fff</color>
 
     <color name="bg_div_color">#C2C2C2</color>
+
+    <color name="one">#9fe1cc</color>
+    <color name="two">#85cdd4</color>
+    <color name="three">#48afb6</color>
+    <color name="four">#22737b</color>
 </resources>

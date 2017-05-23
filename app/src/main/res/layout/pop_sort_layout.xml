@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/pop_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingStart="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
+        android:text="排序:"/>
+
+    <RadioGroup
+        android:id="@+id/sort_rg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/pop_sort_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:button="@null"
+            android:background="@drawable/bg_radio_group"
+            android:textColor="@drawable/bg_radio_group_text"
+            android:text="升序"
+            />
+
+        <RadioButton
+            android:id="@+id/pop_sort_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:button="@null"
+            android:background="@drawable/bg_radio_group"
+            android:textColor="@drawable/bg_radio_group_text"
+            android:text="降序"
+            />
+        <RadioButton
+            android:id="@+id/pop_sort_stu_num_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="-125dp"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:button="@null"
+            android:background="@drawable/bg_radio_group"
+            android:textColor="@drawable/bg_radio_group_text"
+            android:text="按学号升序"
+            />
+
+        <RadioButton
+            android:id="@+id/pop_sort_stu_num_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="20dp"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_10"
+            android:button="@null"
+            android:background="@drawable/bg_radio_group"
+            android:textColor="@drawable/bg_radio_group_text"
+            android:text="按学号降序"
+            />
+    </RadioGroup>
+</LinearLayout>
+

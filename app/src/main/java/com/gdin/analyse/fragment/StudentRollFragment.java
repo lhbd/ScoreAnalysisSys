@@ -1,5 +1,6 @@
 package com.gdin.analyse.fragment;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,16 +11,28 @@ import android.widget.Toast;
 
 import com.gdin.analyse.R;
 import com.gdin.analyse.activity.ClassResultActivity;
-import com.gdin.analyse.adapter.StudentRollAdapter;
-import com.gdin.analyse.entity.StudentRollEntity;
+import com.gdin.analyse.adapter.StudentRollSortAdapter;
+import com.gdin.analyse.entity.HttpResult;
+import com.gdin.analyse.entity.StudentRollSortRequestEntity;
+import com.gdin.analyse.entity.StudentRollSortResultEntity;
+import com.gdin.analyse.info.HttpMethods;
 import com.gdin.analyse.listener.EditWatcherListener;
+import com.gdin.analyse.subscribers.cSubscriber;
+import com.gdin.analyse.tools.CustomApplication;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentRollFragment extends BaseFragment {
     private EditText et;
-    private StudentRollAdapter adapter;
+    private StudentRollSortAdapter adapter;
+    private RecyclerView studentRoll;
+    private SharedPreferences sp;
+    private List<StudentRollSortResultEntity> data = new ArrayList<>();
+    private int limitNum=-1;
+    private String orderBy="";
+    private String sortBy="";
+
     @Override
     public View initView() {
         return View.inflate(getContext(),R.layout.student_roll_layout,null);
@@ -27,20 +40,12 @@ public class StudentRollFragment extends BaseFragment {
 
     @Override
     public void initData(View view) {
-        List<StudentRollEntity> data = getData();
-        adapter = new StudentRollAdapter(R.layout.student_roll_item_layout,data);
-        adapter.setonClickForDetailListener(new StudentRollAdapter.onClickForDetailListener() {
-            @Override
-            public void onClickForDetail() {
-                ((ClassResultActivity)getContext()).addFragment(StudentScoreDetailFragment.newInstance(),3);
-            }
-        });
-        RecyclerView studentRoll = (RecyclerView)view.findViewById(R.id.student_roll);
+        if (sp == null){
+            sp = ((ClassResultActivity)getActivity()).getSp();
+        }
+        studentRoll = (RecyclerView)view.findViewById(R.id.student_roll);
         et = (EditText)view.findViewById(R.id.search_et);
-        setEditChangeListener(data);
-        setEditTextEnterListener(data);
-        studentRoll.setLayoutManager(new LinearLayoutManager(getContext()));
-        studentRoll.setAdapter(adapter);
+        getStudentRollSortData();
     }
 
     @Override
@@ -52,22 +57,67 @@ public class StudentRollFragment extends BaseFragment {
         activity.getToolbarTitle().setText("学生名单一览");
         activity.resetMenuItem(2);
         activity.showBack(true);
+        if (this.orderBy.equals(activity.getOrderBy()) && this.sortBy.equals(activity.getSortBy()) && this.limitNum == activity.getLimitNum())
+            return;
+        setFirst(true);
+        this.orderBy = activity.getOrderBy();
+        this.sortBy = activity.getSortBy();
+        this.limitNum = activity.getLimitNum();
+        if (data == null)
+            return;
+        data.clear();
     }
 
-    private void setEditChangeListener(final List<StudentRollEntity> data){
+    private void getStudentRollSortData() {
+        HttpMethods.getInstance().getStudentRollSort(new cSubscriber<HttpResult<List<StudentRollSortResultEntity>>>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onNext(HttpResult<List<StudentRollSortResultEntity>> result, int i) {
+                data.addAll(result.getData());
+                continueInitData();
+            }
+        }, new StudentRollSortRequestEntity(sp.getInt("loginSchoolId",0),sp.getInt("loginGradeId",0),
+                sp.getInt("loginClassId",0),limitNum,CustomApplication.getExamName(),orderBy,sortBy));
+    }
+    private void continueInitData(){
+        if (data == null || data.size() == 0)
+            return;
+        if (adapter == null){
+            adapter = new StudentRollSortAdapter(R.layout.student_roll_item_layout,data);
+            adapter.setonClickForDetailListener(new StudentRollSortAdapter.onClickForDetailListener() {
+                @Override
+                public void onClickForDetail(int pos) {
+                    ((ClassResultActivity)getContext())
+                            .updateStudentScoreFragment(Integer.valueOf(adapter.getItem(pos).getStuNum()));
+                }
+            });
+            setEditChangeListener();
+            setEditTextEnterListener();
+            studentRoll.setLayoutManager(new LinearLayoutManager(getContext()));
+            studentRoll.setAdapter(adapter);
+        }else{
+            adapter.notifyDataSetChanged();
+        }
+
+    }
+
+    private void setEditChangeListener(){
         et.addTextChangedListener(new EditWatcherListener() {
             @Override
             public void notifyData() {
                 if (et.getText().toString().equals("")){
                     data.clear();
-                    data.addAll(getData());
-                    adapter.notifyDataSetChanged();
+                   getStudentRollSortData();
                 }
             }
         });
 
     }
-    private void setEditTextEnterListener(final List<StudentRollEntity> data){
+    private void setEditTextEnterListener(){
         et.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -79,9 +129,9 @@ public class StudentRollFragment extends BaseFragment {
                             break;
                         case KeyEvent.ACTION_UP:
                             String search = et.getText().toString();
-                            List<StudentRollEntity> newData = new ArrayList<>();
-                            for (StudentRollEntity entity : data){
-                                if (entity.getName().equals(search)|| String.valueOf(entity.getId()).equals(search) ) {
+                            List<StudentRollSortResultEntity> newData = new ArrayList<>();
+                            for (StudentRollSortResultEntity entity : data){
+                                if (entity.getStuName().equals(search)|| String.valueOf(entity.getStuNum()).equals(search) ) {
                                     newData.add(entity);
                                     break;
                                 }
@@ -107,17 +157,9 @@ public class StudentRollFragment extends BaseFragment {
 
     public static StudentRollFragment newInstance() {
 
-        Bundle args = new Bundle();
+        Bundle bundle = new Bundle();
         StudentRollFragment fragment = new StudentRollFragment();
-        fragment.setArguments(args);
+        fragment.setArguments(bundle);
         return fragment;
-    }
-
-    private List<StudentRollEntity> getData(){
-        List<StudentRollEntity> data = new ArrayList<>();
-        for (int i = 0;i<15;i++){
-            data.add(new StudentRollEntity(110110,"哈哈","333","88","77","99","11","1"));
-        }
-        return data;
     }
 }

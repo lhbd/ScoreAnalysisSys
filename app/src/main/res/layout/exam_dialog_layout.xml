@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     >
-
+    <View
+        android:id="@+id/top_line"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="@dimen/dp_4"
+        android:background="@android:color/holo_blue_light"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/exam_dialog"
+        android:layout_below="@id/top_line"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="200dp">
     </android.support.v7.widget.RecyclerView>
-
-</LinearLayout>
+    <View
+        android:id="@+id/bottom_line"
+        android:layout_below="@id/exam_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="@dimen/dp_4"
+        android:background="@android:color/darker_gray"
+        />
+    <TextView
+        android:id="@+id/ok"
+        android:layout_below="@id/bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/dp_10"
+        android:text="ok"
+        android:textColor="@android:color/holo_blue_light"
+        />
+</RelativeLayout>

@@ -3,9 +3,10 @@ package com.gdin.analyse.chart;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Toast;
 
 import com.gdin.analyse.R;
+import com.gdin.analyse.activity.ClassResultActivity;
+import com.gdin.analyse.fragment.StudentScoreDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import lecho.lib.hellocharts.view.ColumnChartView;
  * @revision xiarui 2016.09.08
  * @description 线性图依赖柱状图的使用
  */
-public class LineDependColumnChartCardView extends BaseFrameLayout {
+public class LineDependColumnCardView extends BaseFrameLayout {
 
     /*========== 控件相关 ==========*/
     private LineChartView mLineView;
@@ -40,20 +41,17 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
     private LineChartData mLineData;
     private ColumnChartData mColumnData;
 
-    public final static String[] subjects = new String[]{"sum", "sum", "ch", "ch", "math", "math", "en", "en"};
-    public final static int[] dayStrs = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-    public List<Integer> subjectsValues;
+    public final static String[] subjects = new String[]{"sum", "ch", "math", "en"};
+    public final static String[] dayStrs = new String[]{"1", "2", "3", "4", "5", "6", "7"};
 
-    public LineDependColumnChartCardView(Context context) {
+    public float[] subjectsValues;
+
+    public LineDependColumnCardView(Context context) {
         super(context);
     }
 
-    public LineDependColumnChartCardView(Context context, AttributeSet attrs) {
+    public LineDependColumnCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public LineDependColumnChartCardView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @Override
@@ -62,17 +60,7 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         addView(view);
         mLineView = (LineChartView) view.findViewById(R.id.ldc_line_chart);
         mColumnView = (ColumnChartView) view.findViewById(R.id.ldc_column_chart);
-//        TextView best = (TextView)view.findViewById(R.id.best_tip);
-//        best.setText(getTipText("--- Best",2));
-//        TextView avg = (TextView)view.findViewById(R.id.avg_tip);
-//        avg.setText(getTipText("--- Avg",3));
     }
-
-//    private SpannableString getTipText(String str,int index) {
-//        SpannableString text = new SpannableString(str);
-//        text.setSpan(new ForegroundColorSpan(ChartUtils.COLORS[index]),0,4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        return text;
-//    }
 
     @Override
     public void initListener() {
@@ -80,11 +68,17 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         mColumnView.setOnValueTouchListener(new ColumnValueTouchListener());
     }
 
+    public  void setSubjectsValues(float[] subjectsValues){
+        this.subjectsValues = subjectsValues;
+        setInitialLineDatas();
+        setColumnDatas();   //禁用缩放
+    }
+
     /**
      * 设置初始化线性图数据
      */
     private void setInitialLineDatas() {
-        int numValues = dayStrs.length;                      //7个值 注意与定义的X轴数量相同
+        int numValues = 7;                      //7个值 注意与定义的X轴数量相同
 
         List<AxisValue> axisValues = new ArrayList<>();
         List<PointValue> values = new ArrayList<>();
@@ -92,7 +86,7 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         //设置默认值 都为0
         for (int i = 0; i < numValues; ++i) {
             values.add(new PointValue(i, 0));
-            axisValues.add(new AxisValue(i).setLabel(dayStrs[i]+""));
+            axisValues.add(new AxisValue(i).setLabel(dayStrs[i]));
         }
 
         //设置线
@@ -107,9 +101,7 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         mLineData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
         mLineData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(3));
         mLineView.setLineChartData(mLineData);
-        mLineView.setViewportCalculationEnabled(true);  //自动适应大小
-        mLineView.setZoomEnabled(true);
-        mLineView.setScrollEnabled(true);
+        mLineView.setViewportCalculationEnabled(false);
 
         //设置到窗口上
         Viewport v = new Viewport(0, 110, 6, -5);   //防止曲线超过范围 边界保护
@@ -122,8 +114,6 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
      * 设置柱状图数据
      */
     private void setColumnDatas() {
-        if (subjectsValues==null || subjectsValues.size()==0)
-            return;
         int numColumns = subjects.length;      //长度与定义的X轴长度相同
 
         List<AxisValue> axisValues = new ArrayList<>();
@@ -133,7 +123,8 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         //设置一些随机值、颜色、标签等
         for (int i = 0; i < numColumns; ++i) {
             values = new ArrayList<>();
-            values.add(new SubcolumnValue((float) subjectsValues.get(i), ChartUtils.COLORS[i%2+2]));
+            values.add(new SubcolumnValue(subjectsValues[i], ChartUtils.COLORS[i]));
+//            values.add(new SubcolumnValue((float) Math.random() * 50f + 5, ChartUtils.pickColor()));
             axisValues.add(new AxisValue(i).setLabel(subjects[i]));
             columns.add(new Column(values).setHasLabelsOnlyForSelected(true));
         }
@@ -141,10 +132,10 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         //对数据进行一些设置 类似Column Chart
         mColumnData = new ColumnChartData(columns);
         mColumnData.setAxisXBottom(new Axis(axisValues).setHasLines(true));
-        mColumnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(2));
+        mColumnData.setAxisYLeft(new Axis().setHasLines(true).setMaxLabelChars(3));
         mColumnView.setColumnChartData(mColumnData);
         mColumnView.setOnValueTouchListener(new ColumnValueTouchListener());
-        mColumnView.setValueSelectionEnabled(true); //自动适应
+        mColumnView.setValueSelectionEnabled(true);
         mColumnView.setZoomEnabled(false); //禁用缩放
     }
 
@@ -168,12 +159,6 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
         mLineView.startDataAnimation();
     }
 
-    public  void setSubjectsValues(List<Integer> subjectsValues){
-        this.subjectsValues = subjectsValues;
-        setInitialLineDatas();
-        setColumnDatas();   //禁用缩放
-    }
-
 
     /**
      * 节点触摸监听
@@ -181,7 +166,11 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
     private class LineValueTouchListener implements LineChartOnValueSelectListener {
         @Override
         public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-            Toast.makeText(getContext(), "选中第 " + ((int) value.getX() + 1) + " 个节点", Toast.LENGTH_SHORT).show();
+            if (value.getY()==0)
+                return;
+            //线形图代表全班同学得分时，点击节点跳转到对应学生成绩页
+            ((ClassResultActivity)getContext()).addFragment(StudentScoreDetailFragment.newInstance((int)value.getX()),2);
+
         }
 
         @Override
@@ -196,7 +185,7 @@ public class LineDependColumnChartCardView extends BaseFrameLayout {
 
         @Override
         public void onValueSelected(int columnIndex, int subcolumnIndex, SubcolumnValue value) {
-            setLineDatas(value.getColor(), 50);
+            setLineDatas(value.getColor(), 100);
         }
 
         @Override

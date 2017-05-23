@@ -86,9 +86,6 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity {
                 startActivity(LoginActivity.class);
                 finish();
                 break;
-            case R.id.help:
-                break;
-
         }
         return super.onOptionsItemSelected(item);
     }

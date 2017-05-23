@@ -8,11 +8,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="@dimen/dp_4">
-        <com.gdin.analyse.chart.LineChartCardView
-            android:id="@+id/line_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <com.gdin.analyse.chart.LineDependColumnChartCardView
+
+        <include layout="@layout/polygonsview_cardview_layout"/>
+
+        <com.gdin.analyse.chart.LineDependColumnCardView
             android:id="@+id/ldc_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
